@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 
+// Renderizando erros em tela
+// import 'package:flutter/rendering.dart';
+
+/**
+ * Permite utilizar funções como: debugPaintSizeEnable = true
+ * Exibe detalhes estruturais das widgets em tela com marcações sobre as mesmas
+ * Ex. espaçamento dos botões, margem e etc...
+ */
+
+import './product_manager.dart';
+
 // Método alternativo
 // main() {
 //   runApp(MyApp()); // Método runApp trazido pelo material.dart
@@ -21,59 +32,24 @@ main() => runApp(MyApp());
 //   }
 // }
 
-// StatelessWidget foi herdada de material.dart (não utilizado por hora)
 
-// StatefulWidget foi herdada de material.dart
-class MyApp extends StatefulWidget { 
-
-  @override
-  State<StatefulWidget> createState() {
-    
-    return _MyAppState();
-  }
-}
-
-// O _ afrente do nome da classe, é uma convenção para classes que não serão chamadas fora desta classe
-// e sim, para outra classe dentro do mesmo escopo
-class _MyAppState extends State<MyApp> {
-  
-  // O _ frente ao nome da propriedade, é utilizado como convenção quando
-  // a propriedade será utilizada somente dentro desta classe
-  List<String> _products = ['Food Tester'];
+class MyApp extends StatelessWidget { 
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Material style properties
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
+        accentColor: Colors.deepPurple,
+        brightness: Brightness.dark,
+      ),
+      // Material style properties end
       home: Scaffold(
         appBar: AppBar(
           title: Text("Menu"),
         ),
-        body: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.all(10.0),
-              child: RaisedButton(
-                onPressed: () {
-                  setState(() {  // Função disponibilizada pelo flutter
-                    _products.add("Advanced Food tester");
-                    print(_products);
-                  });
-                }, // Chamada anonima (e no caso, função vazia/sem retorno)
-                child: Text("Add Product"),
-              ),
-            ),
-            Column(
-              children: _products.map((element) => Card(
-                child: Column(
-                  children: <Widget>[
-                    Image.asset("assets/food.jpg"),
-                    Text(element),
-                  ],
-                ),
-              ),).toList()
-            )
-          ],
-        ),
+        body: ProductManager(),
       ),
     );
   }
