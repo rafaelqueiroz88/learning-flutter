@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // Renderizando erros em tela
 // import 'package:flutter/rendering.dart';
 
+import 'pages/auth.dart';
+
 /**
  * Permite utilizar funções como: debugPaintSizeEnable = true
  * Exibe detalhes estruturais das widgets em tela com marcações sobre as mesmas
@@ -40,17 +42,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // Material style properties
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        accentColor: Colors.deepPurple,
-        brightness: Brightness.dark,
+        primarySwatch: Colors.red,
+        accentColor: Colors.redAccent,
+        // brightness: Brightness.dark,
       ),
       // Material style properties end
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Menu"),
-        ),
-        body: ProductManager(),
-      ),
+      home: AuthPage(),
     );
   }
 }

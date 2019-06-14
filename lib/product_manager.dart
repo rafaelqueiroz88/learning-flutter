@@ -10,7 +10,7 @@ import './product_control.dart';
 
 class ProductManager extends StatefulWidget {
 
-  final String startingProduct;
+  final Map<String, String> startingProduct;
 
   // Atribuindo um valor padrão, e dizendo para a instancia que o valor a ser passado
   // É o startingProduct, nesse caso
@@ -27,9 +27,13 @@ class ProductManager extends StatefulWidget {
 // e sim, para outra classe dentro do mesmo escopo
 class _ProductManager extends State<ProductManager> {
 
+  // A principio, a lista era definida como uma lista de string, e passou a ser uma lista
+  // do tipo map
+  List<Map<String, String>> _products = [];
+
   // O _ frente ao nome da propriedade, é utilizado como convenção quando
   // a propriedade será utilizada somente dentro desta classe
-  List<String> _products = [];
+  // List<String> _products = [];
 
   @override
   void initState() {
@@ -47,7 +51,9 @@ class _ProductManager extends State<ProductManager> {
     super.didUpdateWidget(oldWidget);
   }
 
-  void _updateProduct(String product) {
+  // dynamic poderia ser usado como um tipo genérico, porém, neste caso sabemos
+  // qual o tipo do elemento que será passado para o map
+  void _addProduct(Map<String, String> product) {
 
     setState(() {  // Função disponibilizada pelo flutter
       print(_products);
@@ -55,14 +61,24 @@ class _ProductManager extends State<ProductManager> {
     });
   }
 
+  void _deleteProduct(int index) {
+
+    setState(() {
+      _products.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Column(children: [Container(
-      margin: EdgeInsets.all(10.0),
-      child: ProductControl(_updateProduct),
-    ),
-    Expanded(child: Products(_products)),
-    ],);
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.all(10.0),
+          child: ProductControl(_addProduct),
+        ),
+        Expanded(child: Products(_products, deleteProduct: _deleteProduct)),
+      ],
+    );
   }
 }
