@@ -53,20 +53,22 @@ class _ProductManager extends State<ProductManager> {
 
   // dynamic poderia ser usado como um tipo genérico, porém, neste caso sabemos
   // qual o tipo do elemento que será passado para o map
-  void _addProduct(Map<String, String> product) {
+  
+  // Métodos movidos para o main.dart
+  // void _addProduct(Map<String, String> product) {
 
-    setState(() {  // Função disponibilizada pelo flutter
-      print(_products);
-      _products.add(product);
-    });
-  }
+  //   setState(() {  // Função disponibilizada pelo flutter
+  //     print(_products);
+  //     _products.add(product);
+  //   });
+  // }
 
-  void _deleteProduct(int index) {
+  // void _deleteProduct(int index) {
 
-    setState(() {
-      _products.removeAt(index);
-    });
-  }
+  //   setState(() {
+  //     _products.removeAt(index);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

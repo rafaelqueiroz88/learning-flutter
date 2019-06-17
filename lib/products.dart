@@ -30,9 +30,12 @@ class Products extends StatelessWidget {
                 FlatButton(
                   child: Text("Detalhes"), 
                   onPressed: () => Navigator.push<bool>(context, MaterialPageRoute(
-                    builder: (BuildContext context) 
-                        => ProductPage(products[index]['title'], products[index]['image']),
-                      ),
+
+                    // Passando rota dinâmica com parâmetro dinamico
+                    // builder: (BuildContext context) 
+                        // => ProductPage(products[index]['title'], products[index]['image']),
+                      // ),
+                    
                     ).then((bool value) {
                       if(value) {
                         deleteProduct(index);

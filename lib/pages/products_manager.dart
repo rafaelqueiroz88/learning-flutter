@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './products.dart';
+import './product_create.dart';
+import './products_list.dart';
 
 class ProductsManagePage extends StatelessWidget {
 
@@ -30,13 +32,22 @@ class ProductsManagePage extends StatelessWidget {
           title: Text("Gerenciar Produtos"),
           bottom: TabBar(
             tabs: <Widget>[
-              Tab(text: 'Novo Produto',),
-              Tab(text: 'Todos Produtos',),
+              Tab(
+                icon: Icon(Icons.create),
+                text: 'Novo Produto',
+                ),
+              Tab(
+                icon: Icon(Icons.list),
+                text: 'Todos Produtos',
+              ),
             ],
           ),
         ),
-        body: Center(
-          child: Text('Gestão de produtos'),
+        body: TabBarView( // precisa combinar com a quantidade de tabs descritas acima
+          children: <Widget>[
+            ProductCreatePage(),
+            ProductsListePage(),
+          ],
         ),
       ),);
   }

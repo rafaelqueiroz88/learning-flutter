@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './productsmanager.dart';
+import './products_manager.dart';
 import '../product_manager.dart';
 
 class ProductsPage extends StatelessWidget {
@@ -20,9 +20,14 @@ class ProductsPage extends StatelessWidget {
             ListTile(
               title: Text('Gerenciar Produtos'),
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (BuildContext context) => ProductsManagePage(),),
-                );
+                
+                // Método substituido para uso das rotas dinamicas
+                // Navigator.pushReplacement(context, MaterialPageRoute(
+                  // context removido daqui, e colado em main.dart
+                  // builder: ),
+                // );
+
+                Navigator.pushReplacementNamed(context, '/admin');
               },
             ),
           ],
