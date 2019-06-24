@@ -4,37 +4,10 @@ import 'package:flutter_course/pages/products.dart';
 // Renderizando erros em tela
 // import 'package:flutter/rendering.dart';
 
-import 'pages/auth.dart';
-
-/**
- * Permite utilizar funções como: debugPaintSizeEnable = true
- * Exibe detalhes estruturais das widgets em tela com marcações sobre as mesmas
- * Ex. espaçamento dos botões, margem e etc...
- */
-
-import './product_manager.dart';
+import './pages/product.dart';
 import './pages/products_manager.dart';
 
-// Método alternativo
-// main() {
-//   runApp(MyApp()); // Método runApp trazido pelo material.dart
-// }
-
-// Quando houver somente uma única chamada dentro de um método, pode ser chamado desta forma
 main() => runApp(MyApp());
-
-// class MyApp extends StatelessWidget { // StatelessWidget foi herdada de material.dart
-
-//   build(context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: Text("Rafael"),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 
 class MyApp extends StatefulWidget {
@@ -86,7 +59,7 @@ class _MyApp extends State<MyApp> {
       // Entendendo como funcionam os esquemas de rota dinâmico
       routes: {
         // '/' é o endereço especial que significa HOME
-        '/': (BuildContext context) => ProductsPage(),
+        '/': (BuildContext context) => ProductsPage(_products, _addProduct, _deleteProduct),
         // context recortado de products.dart (para compreendimento de como funciona as rotas)
         '/admin': (BuildContext context) => ProductsManagePage(),        
       },
@@ -98,8 +71,8 @@ class _MyApp extends State<MyApp> {
         
         if(pathElements[1] == 'product') {
           final int index = int.parse(pathElements[2]);
-          return MaterialPageRoute(
-            builder: (BuildContext context) => ProductPage(products[index]['title'], products[index]['image'])
+          return MaterialPageRoute<bool>(
+            builder: (BuildContext context) => ProductPage(_products[index]['title'], _products[index]['image'])
           );
         }
 
