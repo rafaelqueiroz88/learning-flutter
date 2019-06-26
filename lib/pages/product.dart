@@ -9,6 +9,35 @@ class ProductPage extends StatelessWidget {
 
   ProductPage(this.title, this.imageUrl);
 
+  _showWarningDialog(BuildContext context) {
+
+    // Para esta função, é necessário informar ao context, o CONTEXTO a ser utilizado
+    // Neste caso, usamos o mesmo que foi declarado no começo deste método
+    showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Tem certeza?"),
+        content: Text("Esta ação NÃO PODE ser desfeita"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Cancelar"), 
+            onPressed: () {
+              // Caso não houver a certeza
+              Navigator.pop(context);
+            },
+          ),
+          FlatButton(
+            child: Text("Apagar"),
+            onPressed: () {
+              // Caso houver a certeza de que basta apagar, é só proceder
+              Navigator.pop(context);
+              Navigator.pop(context, true);
+            },  
+          ),
+        ],
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -44,7 +73,9 @@ class ProductPage extends StatelessWidget {
                 child: RaisedButton(
                   color: Theme.of(context).accentColor,
                   child: Text("Apagar " + title), 
-                  onPressed: () => Navigator.pop(context, true),
+                    // Comentado por incluir um dialog ao apertar o botão
+                    // onPressed: () => Navigator.pop(context, true),
+                    onPressed: () => _showWarningDialog(context),
                 ),
               ),
             ],
