@@ -10,7 +10,17 @@ class ProductCreatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Center(
-      child: Text("Novo produto"),
+      child: RaisedButton(
+        child: Text("Salvar"),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Center(child: Text("Teste"),);
+            }
+          );
+        },
+      ),
     );
   }
 }
