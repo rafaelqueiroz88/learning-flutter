@@ -36,39 +36,41 @@ class _ProductCreatePage extends State<ProductCreatePage> {
     //     },
     //   ),
     // );
-    return Column(children: <Widget>[
-      TextField(
-        autofocus: true,
-        onChanged: (String value) {
-          setState(() {
-            title = value;
-            if(title == '')
-              title = "Nome do produto";
-          });
-        },
-      ),
-      Text(title.toString()),
+    return Container(
+      margin: EdgeInsets.all(40.0),
+      child: ListView(
+      children: <Widget>[
+        TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+            labelText: 'Product Title',
+          ),
+        ),
+        Text(title.toString()),
 
-      TextField(
-        onChanged: (String value) {
-          setState(() {
-            description = value;
-            if(description == '')
-              description = 'Descrição';
-          });
-        },
-      ),
-      Text(description),
+        TextField(
+          maxLines: 4,
+          decoration: InputDecoration(
+            labelText: 'Product Description',
+          ),
+        ),
+        Text(description),
 
-      TextField(
-        keyboardType: TextInputType.number,
-        onChanged: (String value) {
-          setState(() {
-            price = double.parse(value);
-          });
-        },
-      ),
-      // Text(price.toString()),
-    ],);
+        TextField(
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Product Price',
+          ),
+          onChanged: (String value) {
+            setState() {
+              price = double.parse(value);
+            }
+          },
+        ),
+        RaisedButton(child: Text("Salvar"), onPressed: () {
+          
+        },)
+      ],
+    ),);
   }
 }

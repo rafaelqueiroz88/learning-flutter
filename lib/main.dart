@@ -59,9 +59,9 @@ class _MyApp extends State<MyApp> {
       // Entendendo como funcionam os esquemas de rota dinâmico
       routes: {
         // '/' é o endereço especial que significa HOME
-        '/': (BuildContext context) => ProductsPage(_products, _addProduct, _deleteProduct),
+        '/': (BuildContext context) => ProductsPage(_products),
         // context recortado de products.dart (para compreendimento de como funciona as rotas)
-        '/admin': (BuildContext context) => ProductsManagePage(),        
+        '/admin': (BuildContext context) => ProductsManagePage(_addProduct, _deleteProduct),
       },
       onGenerateRoute: (RouteSettings settings) {
         
