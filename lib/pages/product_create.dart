@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 // prejudicando o desempenho ou até mesmo o visual da aplicação).
 class ProductCreatePage extends StatefulWidget {
 
+  final Function addProduct;
+
+  ProductCreatePage(this.addProduct);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -15,27 +19,12 @@ class ProductCreatePage extends StatefulWidget {
 
 class _ProductCreatePage extends State<ProductCreatePage> {
 
-  String title = "Nome do produto";
-  String description = "Descrição";
-  double price = 0;
+  String _title;
+  String _description;
+  double _price;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    // Comentado para dar inicio aos inputs manuais em tela
-    // return Center(
-    //   child: RaisedButton(
-    //     child: Text("Salvar"),
-    //     onPressed: () {
-    //       showModalBottomSheet(
-    //         context: context,
-    //         builder: (BuildContext context) {
-    //           return Center(child: Text("Teste"),);
-    //         }
-    //       );
-    //     },
-    //   ),
-    // );
     return Container(
       margin: EdgeInsets.all(40.0),
       child: ListView(
@@ -45,30 +34,52 @@ class _ProductCreatePage extends State<ProductCreatePage> {
           decoration: InputDecoration(
             labelText: 'Product Title',
           ),
+          onChanged: (String titleValue) {
+            setState(() {
+              _title = titleValue;
+            });
+          },
         ),
-        Text(title.toString()),
 
         TextField(
           maxLines: 4,
           decoration: InputDecoration(
             labelText: 'Product Description',
           ),
+          onChanged: (String descriptionValue) {
+            setState(() {
+              _description = descriptionValue;
+            });
+          },
         ),
-        Text(description),
 
         TextField(
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             labelText: 'Product Price',
           ),
-          onChanged: (String value) {
-            setState() {
-              price = double.parse(value);
-            }
+          onChanged: (String priceValue) {
+            setState(() {
+              _price = double.parse(priceValue);
+            });
           },
         ),
-        RaisedButton(child: Text("Salvar"), onPressed: () {
-          
+        SizedBox(
+          height: 10.0,
+        ),
+        RaisedButton(
+          child: Text("Salvar"), 
+          color: Theme.of(context).accentColor,
+          textColor: Colors.white,
+          onPressed: () {
+          final Map<String, dynamic> product = {
+            'title': _title, 
+            'description': _description,
+            'price': _price,
+            'image': 'assets/food.jpg',
+          };
+          widget.addProduct(product);
+          Navigator.pushReplacementNamed(context, '/');
         },)
       ],
     ),);

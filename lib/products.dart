@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 
 class Products extends StatelessWidget {
 
-  /**
-   * Class properties
-   */
-  final List<Map<String, String>> products;
-  final Function deleteProduct;
+  final List<Map<String,dynamic>> products;
 
-  // Atribuindo valor padrão no construtor, no caso um valor vazio
-  // alternativas: [this.products = const []], {this.deleteProduct}
-  Products(this.products, {this.deleteProduct});
+  Products(this.products);
 
   Widget _buildProductionItem(BuildContext context, int index) {
     
@@ -30,7 +24,7 @@ class Products extends StatelessWidget {
                   onPressed: () => Navigator.pushNamed<bool>(context, '/product/' + index.toString())
                   .then((bool value) {
                       if(value) {
-                        deleteProduct(index);
+                        
                       }                        
                     }),
                   ),

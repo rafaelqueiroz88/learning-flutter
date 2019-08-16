@@ -5,6 +5,11 @@ import './products_list.dart';
 
 class ProductsManagePage extends StatelessWidget {
 
+  final Function addProduct;
+  final Function deleteProduct;
+
+  ProductsManagePage(this.addProduct, this.deleteProduct);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(length: 2, child: Scaffold(
@@ -30,8 +35,8 @@ class ProductsManagePage extends StatelessWidget {
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
-                icon: Icon(Icons.create),
-                text: 'Novo Produto',
+                  icon: Icon(Icons.create),
+                  text: 'Novo Produto',
                 ),
               Tab(
                 icon: Icon(Icons.list),
@@ -42,7 +47,7 @@ class ProductsManagePage extends StatelessWidget {
         ),
         body: TabBarView( // precisa combinar com a quantidade de tabs descritas acima
           children: <Widget>[
-            ProductCreatePage(),
+            ProductCreatePage(addProduct),
             ProductsListePage(),
           ],
         ),

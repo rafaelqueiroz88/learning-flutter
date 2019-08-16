@@ -21,11 +21,11 @@ class MyApp extends StatefulWidget {
 
 class _MyApp extends State<MyApp> {
 
-  List<Map<String, String>> _products = [];
+  List<Map<String, dynamic>> _products = [];
 
   // dynamic poderia ser usado como um tipo genérico, porém, neste caso sabemos
   // qual o tipo do elemento que será passado para o map
-  void _addProduct(Map<String, String> product) {
+  void _addProduct(Map<String, dynamic> product) {
 
     setState(() {  // Função disponibilizada pelo flutter
       print(_products);
@@ -81,8 +81,7 @@ class _MyApp extends State<MyApp> {
       onUnknownRoute: (RouteSettings settings) {
 
         return MaterialPageRoute(
-          builder: (BuildContext context) => 
-            ProductsPage(_products, _addProduct, _deleteProduct)
+          builder: (BuildContext context) => ProductsPage(_products)
         );
       },
     );
