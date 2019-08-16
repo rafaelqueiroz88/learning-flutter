@@ -23,9 +23,7 @@ class Products extends StatelessWidget {
                   child: Text("Detalhes"), 
                   onPressed: () => Navigator.pushNamed<bool>(context, '/product/' + index.toString())
                   .then((bool value) {
-                      if(value) {
-                        
-                      }                        
+                      if(value) { }
                     }),
                   ),
                 ],
@@ -37,10 +35,8 @@ class Products extends StatelessWidget {
 
   Widget _buildProductsList() {
 
-    // Condicional convencional (aceita multiplas condições)
     Widget productCard = Center(child: Text("There are no foods in here. Please add some!"),);
     if(products.length > 0) {
-
       productCard = ListView.builder(
         itemBuilder: _buildProductionItem,
         itemCount: products.length,
@@ -48,17 +44,10 @@ class Products extends StatelessWidget {
     }
 
     return productCard;
-
-    // Alternativa para condicionais simples
-    // return products.length > 0 ? ListView.builder(
-    //   itemBuilder: _buildProductionItem,
-    //   itemCount: products.length,
-    // ) : Center(child: Text("There are no foods in here. Please add some!"),);
   }
 
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(BuildContext context) {    
     return _buildProductsList();   
   }
 }

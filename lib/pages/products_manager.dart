@@ -45,7 +45,7 @@ class ProductsManagePage extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView( // precisa combinar com a quantidade de tabs descritas acima
+        body: TabBarView(
           children: <Widget>[
             ProductCreatePage(addProduct),
             ProductsListePage(),
