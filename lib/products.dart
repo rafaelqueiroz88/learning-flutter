@@ -14,7 +14,38 @@ class Products extends StatelessWidget {
             Image.asset(products[index]['image']),
             Container(
               padding: EdgeInsets.all(10.0), 
-              child: Text(products[index]['title']),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text(
+                    products[index]['title'], 
+                    style: TextStyle(
+                      fontSize: 20.0, fontWeight: FontWeight.bold, fontFamily: "alexbrush"
+                    )
+                  ),
+                  SizedBox(width: 5.0,),
+                  Container(
+                    decoration: BoxDecoration(color: Theme.of(context).accentColor, borderRadius: BorderRadius.circular(4.0)),
+                    padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 5.0),
+                    child: Text(
+                      'R\$ ' + products[index]['price'].toString(),
+                      style: TextStyle(
+                        color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold, fontFamily: "alexbrush"
+                      )
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey, width: 1.0),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                child: Text('162. Potim, Rua Luis Tomas de Lima'),
+              ),
             ),
             ButtonBar(
               alignment: MainAxisAlignment.center, 
@@ -35,7 +66,7 @@ class Products extends StatelessWidget {
 
   Widget _buildProductsList() {
 
-    Widget productCard = Center(child: Text("There are no foods in here. Please add some!"),);
+    Widget productCard = Center(child: Text("Nenhum prato cadastrado. Adicione algum!"),);
     if(products.length > 0) {
       productCard = ListView.builder(
         itemBuilder: _buildProductionItem,

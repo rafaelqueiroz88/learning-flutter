@@ -17,6 +17,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   String _title;
   String _description;
   double _price;
+  bool _acceptTerms = false;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
             'image': 'assets/food.jpg',
           };
           widget.addProduct(product);
-          Navigator.pushReplacementNamed(context, '/');
+          Navigator.pushReplacementNamed(context, '/products');
         },)
       ],
     ),);
