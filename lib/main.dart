@@ -8,12 +8,20 @@ import 'package:flutter_course/pages/products.dart';
 import './pages/product.dart';
 import './pages/products_manager.dart';
 
-main() => runApp(MyApp());
+void main() {
+
+  /**
+   * Os recursos abaixo dependem do rendering.dart, descomente-os para debbugar
+   */
+  // debugPaintSizeEnabled = true;
+  // debugPaintBaselinesEnabled = true;
+  // debugPaintPointersEnabled = true;
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyApp();
   }
 }

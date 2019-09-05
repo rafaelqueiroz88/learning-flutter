@@ -22,9 +22,10 @@ class ProductsManagePage extends StatelessWidget {
                 title: Text('Toque em uma Ação'),
               ),
               ListTile(
+                leading: Icon(Icons.shop),
                 title: Text('Ver Produtos'),
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, '/');
+                  Navigator.pushReplacementNamed(context, '/products');
                 },
               ),
             ],
