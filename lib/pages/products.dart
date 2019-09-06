@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../product_manager.dart';
+import '../widgets/products/products.dart';
 
 class ProductsPage extends StatelessWidget {
 
@@ -32,8 +32,14 @@ class ProductsPage extends StatelessWidget {
       ),
       appBar: AppBar(
         title: Text("Foods"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {},
+          ),
+        ],
       ),
-      body: ProductManager(products),
+      body: Products(products),
     );
   }
 }

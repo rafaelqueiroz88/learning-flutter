@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'dart:async'; // Importação utilizada para pegar a função Future
+import 'dart:async';
+
+import 'package:flutter_course/widgets/ui_elements/title_default.dart'; // Importação utilizada para pegar a função Future
 
 class ProductPage extends StatelessWidget {
 
@@ -54,15 +56,20 @@ class ProductPage extends StatelessWidget {
               Image.asset(imageUrl),
               Container(
                 padding: EdgeInsets.all(10.0), 
-                child: Text("Detalhes de " + title),
+                child: TitleDefault(title),
               ),
-              Container(
-                padding: EdgeInsets.all(10.0),
-                child: RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  child: Text("Apagar " + title),
-                    onPressed: () => _showWarningDialog(context),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: RaisedButton(
+                      color: Theme.of(context).accentColor,
+                      child: Text("Apagar " + title),
+                      onPressed: () => _showWarningDialog(context),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

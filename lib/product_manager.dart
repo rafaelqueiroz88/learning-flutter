@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './products.dart';
 
 class ProductManager extends StatelessWidget {
 
@@ -11,7 +10,7 @@ class ProductManager extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(child: Products(_products)),
+        // Expanded(child: ),
       ],
     );
   }
