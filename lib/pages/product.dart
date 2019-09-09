@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
+// Importação utilizada para pegar a função Future
 import 'dart:async';
 
-import 'package:flutter_course/widgets/ui_elements/title_default.dart'; // Importação utilizada para pegar a função Future
+import 'package:flutter_course/widgets/ui_elements/title_default.dart';
 
 class ProductPage extends StatelessWidget {
 
