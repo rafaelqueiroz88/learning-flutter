@@ -12,6 +12,68 @@ class _AuthPageState extends State<AuthPage> {
   String _password;
   bool _acceptTerms = false;
 
+  DecorationImage _buildBackgroundImage() {
+    return DecorationImage(
+      fit: BoxFit.cover,
+      colorFilter: ColorFilter.mode(
+          Colors.black.withOpacity(0.3), BlendMode.dstATop
+      ),
+      image: AssetImage('assets/background.jpg'),
+    );
+  }
+
+  Widget _buildEmailTextField() {
+    return TextField(
+      autofocus: true,
+      decoration: InputDecoration(
+        labelText: 'E-mail',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      onChanged: (String value) {
+        setState(() {
+          _email = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildSenhaTextField() {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: 'Senha',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      obscureText: true,
+      onChanged: (String value) {
+        setState(() {
+          _password = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildTermsSwitch() {
+    return SwitchListTile(
+      value: _acceptTerms, title: Text('Aceitar os termos de uso'), onChanged: (bool value) {
+        setState(() {
+          _acceptTerms = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildSubmitButton(BuildContext context) {
+    return RaisedButton(
+      child: Text('Entrar'),
+      color: Colors.redAccent,
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, '/products');
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,13 +83,7 @@ class _AuthPageState extends State<AuthPage> {
       backgroundColor: Colors.redAccent,
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.dstATop
-            ),
-            image: AssetImage('assets/background.jpg'),
-          ),
+          image: _buildBackgroundImage(),
         ),
         padding: EdgeInsets.all(10.0),
         child: Center(
@@ -35,55 +91,22 @@ class _AuthPageState extends State<AuthPage> {
             child: Column(
               children: <Widget>[
 
-                TextField(
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: 'E-mail',
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  onChanged: (String value) {
-                    setState(() {
-                      _email = value;
-                    });
-                  },
-                ),
+                _buildEmailTextField(),
 
                 SizedBox(
                   height: 10.0,
                 ),
 
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Senha',
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  obscureText: true,
-                  onChanged: (String value) {
-                    setState(() {
-                      _password = value;
-                    });
-                  },
-                ),
+                _buildSenhaTextField(),
 
                 SizedBox(
                   height: 10.0,
                 ),
-                SwitchListTile(
-                  value: _acceptTerms, title: Text('Aceitar os termos de uso'), onChanged: (bool value) {
-                  setState(() {
-                    _acceptTerms = value;
-                  });
-                },
-                ),
-                RaisedButton(
-                  child: Text('Entrar'),
-                  color: Colors.redAccent,
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/products');
-                  },
-                ),
+
+                _buildTermsSwitch(),
+
+                _buildSubmitButton(context),
+
               ],
             ),
           ),

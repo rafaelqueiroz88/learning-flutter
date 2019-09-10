@@ -12,6 +12,22 @@ class ProductPage extends StatelessWidget {
 
   ProductPage(this.title, this.imageUrl);
 
+  Widget _buildProductRow(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(10.0),
+          child: RaisedButton(
+            color: Theme.of(context).accentColor,
+            child: Text("Apagar " + title),
+            onPressed: () => _showWarningDialog(context),
+          ),
+        ),
+      ],
+    );
+  }
+
   _showWarningDialog(BuildContext context) {
 
     showDialog(context: context, builder: (BuildContext context) {
@@ -59,19 +75,7 @@ class ProductPage extends StatelessWidget {
                 padding: EdgeInsets.all(10.0), 
                 child: TitleDefault(title),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      child: Text("Apagar " + title),
-                      onPressed: () => _showWarningDialog(context),
-                    ),
-                  ),
-                ],
-              ),
+              _buildProductRow(context),
             ],
           ),
         ),

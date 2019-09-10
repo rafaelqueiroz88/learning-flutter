@@ -11,6 +11,28 @@ class ProductCard extends StatelessWidget {
 
   ProductCard(this.product, this.productIndex);
 
+  Widget _buildButtonBar(BuildContext context) {
+    return ButtonBar(
+      alignment: MainAxisAlignment.center,
+      children: <Widget>[
+        IconButton(
+          // child: Text("Detalhes"), // IconButton não possui um CHILD
+          icon: Icon(Icons.delete),
+          iconSize: 35.0,
+          onPressed: () => Navigator.pushNamed<bool>(context, '/product/' + productIndex.toString())
+              .then((bool value) {
+            if(value) { }
+          }),
+        ),
+        IconButton(
+          icon: Icon(Icons.favorite_border),
+          color: Colors.red,
+          iconSize: 35.0,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -36,25 +58,7 @@ class ProductCard extends StatelessWidget {
             ),
             child: AddressDefault('162. Potim, Rua Luis Tomas de Lima'),
           ),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                // child: Text("Detalhes"), // IconButton não possui um CHILD
-                icon: Icon(Icons.delete),
-                iconSize: 35.0,
-                onPressed: () => Navigator.pushNamed<bool>(context, '/product/' + productIndex.toString())
-                    .then((bool value) {
-                  if(value) { }
-                }),
-              ),
-              IconButton(
-                icon: Icon(Icons.favorite_border),
-                color: Colors.red,
-                iconSize: 35.0,
-              ),
-            ],
-          ),
+          _buildButtonBar(context),
         ],
       ),
     );
