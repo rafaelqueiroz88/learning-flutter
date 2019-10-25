@@ -33,6 +33,7 @@ class ProductsManagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(length: 2, child: Scaffold(
+      backgroundColor: Colors.orangeAccent,
       // backgroundColor: Colors.redAccent,
       drawer: _buildDrawer(context),
       appBar: AppBar(
@@ -40,9 +41,9 @@ class ProductsManagePage extends StatelessWidget {
         bottom: TabBar(
           tabs: <Widget>[
             Tab(
-                icon: Icon(Icons.create),
-                text: 'Novo Produto',
-              ),
+              icon: Icon(Icons.create),
+              text: 'Novo Produto',
+            ),
             Tab(
               icon: Icon(Icons.list),
               text: 'Todos Produtos',

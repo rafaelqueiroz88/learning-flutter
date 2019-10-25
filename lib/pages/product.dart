@@ -62,7 +62,7 @@ class ProductPage extends StatelessWidget {
         return Future.value(false); 
       }, 
       child: Scaffold(
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Colors.orangeAccent,
         appBar: AppBar(
           title: Text(title),
         ),

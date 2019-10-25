@@ -8,7 +8,6 @@ class Products extends StatelessWidget {
 
   Products(this.products);
 
-
   Widget _buildProductsList() {
 
     Widget productCard = Center(child: Text("Nenhum prato cadastrado. Adicione algum!"),);

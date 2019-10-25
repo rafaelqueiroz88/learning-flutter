@@ -34,9 +34,9 @@ class _MyApp extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
           brightness: Brightness.light,
-          primarySwatch: Colors.red,
-          accentColor: Colors.redAccent,
-          buttonColor: Colors.redAccent
+          primarySwatch: Colors.orange,
+          accentColor: Colors.orangeAccent,
+          buttonColor: Colors.orange
       ),
       routes: {
         // '/': (BuildContext context) => ProductsPage(_products),
@@ -53,14 +53,14 @@ class _MyApp extends State<MyApp> {
         if(pathElements[1] == 'product') {
           final int index = int.parse(pathElements[2]);
           return MaterialPageRoute<bool>(
-              builder: (BuildContext context) => ProductPage(_products[index]['title'], _products[index]['image'])
+            builder: (BuildContext context) => ProductPage(_products[index]['title'], _products[index]['image'])
           );
         }
         return null;
       },
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            builder: (BuildContext context) => ProductsPage(_products)
+          builder: (BuildContext context) => ProductsPage(_products)
         );
       },
     );

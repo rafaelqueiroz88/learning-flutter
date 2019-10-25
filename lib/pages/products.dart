@@ -32,7 +32,7 @@ class ProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      backgroundColor: Colors.redAccent,
+      backgroundColor: Colors.orangeAccent,
       drawer: _buildSideDrawer(context),
       appBar: AppBar(
         title: Text("Foods"),
