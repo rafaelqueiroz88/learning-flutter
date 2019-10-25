@@ -18,44 +18,57 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   String _description;
   double _price;
   bool _acceptTerms = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _submitForm() {
+    _formKey.currentState.save();
+    final Map<String, dynamic> product = {
+      'title': _title,
+      'description': _description,
+      'price': _price,
+      'image': 'assets/food.jpg'
+    };
+    widget.addProduct(product);
+    Navigator.pushReplacementNamed(context, '/products');
+  }
 
   Widget _buildTitleTextField() {
-    return TextField(
+    return TextFormField(
       autofocus: true,
       decoration: InputDecoration(
         labelText: 'Product Title',
       ),
-      onChanged: (String titleValue) {
+      onSaved: (String value) {
         setState(() {
-          _title = titleValue;
+          _title = value;
         });
       },
     );
   }
 
   Widget _buildDescriptionTextField() {
-    return TextField(
+    return TextFormField(
       maxLines: 4,
       decoration: InputDecoration(
         labelText: 'Product Description',
       ),
-      onChanged: (String descriptionValue) {
+      onSaved: (String value) {
         setState(() {
-          _description = descriptionValue;
+          _description = value;
         });
       },
     );
   }
 
   Widget _buildPriceTextField() {
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'Product Price',
       ),
-      onChanged: (String priceValue) {
+      onSaved: (String value) {
         setState(() {
-          _price = double.parse(priceValue);
+          _price = double.parse(value);
         });
       },
     );
@@ -63,9 +76,12 @@ class _ProductCreatePage extends State<ProductCreatePage> {
 
   Widget _buildSubmitButton() {
     return RaisedButton(
-      child: Text("Salvar"),
-      color: Theme.of(context).accentColor,
-      textColor: Colors.white,
+      child: ListTile(
+        leading: Icon(Icons.save),
+        title: Text('Armazenar', style: TextStyle(color: Colors.white,),),
+      ),
+      // Cor personalizada, como está comentado, a cor padrão será a que foi definida em main.dart
+      // color: Theme.of(context).accentColor,
       onPressed: () {
         final Map<String, dynamic> product = {
           'title': _title,
@@ -75,24 +91,44 @@ class _ProductCreatePage extends State<ProductCreatePage> {
         };
         widget.addProduct(product);
         Navigator.pushReplacementNamed(context, '/products');
-      },);
+    },);
+
+    /**
+     * Exemplo de uso do GestureDetector
+     * Esta widget permite chamadas de ações, eventos, métodos através de propriedades como onTap
+     */
+//    return GestureDetector(
+//      // Com o GesturDetector é possível fazer chamada em eventos como onTap, e neste, informar métodos
+//      // onTap: _submit_method,
+//      child: Container(
+//        color: Colors.green,
+//        padding: EdgeInsets.all(5.0),
+//        child: Text('Novo Botão'),
+//      ),
+//    );
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(40.0),
-      child: ListView(
-      children: <Widget>[
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          children: <Widget>[
 
-        _buildTitleTextField(),
-        _buildDescriptionTextField(),
-        _buildPriceTextField(),
+            _buildTitleTextField(),
+            _buildDescriptionTextField(),
+            _buildPriceTextField(),
 
-        SizedBox( height: 10.0, ),
+            SizedBox( height: 10.0, ),
 
-        _buildSubmitButton(),
+            _buildSubmitButton(),
 
-      ],),);
+          ],
+        ),
+      ),
+    );
   }
 }

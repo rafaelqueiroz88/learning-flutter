@@ -29,6 +29,43 @@ class MyApp extends StatefulWidget {
 class _MyApp extends State<MyApp> {
   List<Map<String, dynamic>> _products = [];
 
+  @override
+  Widget _buildMain(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.red,
+          accentColor: Colors.redAccent,
+          buttonColor: Colors.redAccent
+      ),
+      routes: {
+        // '/': (BuildContext context) => ProductsPage(_products),
+        '/': (BuildContext context) => AuthPage(),
+        '/products': (BuildContext context) => ProductsPage(_products),
+        '/admin': (BuildContext context) => ProductsManagePage(_addProduct, _deleteProduct),
+      },
+      onGenerateRoute: (RouteSettings settings) {
+
+        final List<String> pathElements = settings.name.split('/');
+        if(pathElements[0] != '')
+          return null;
+
+        if(pathElements[1] == 'product') {
+          final int index = int.parse(pathElements[2]);
+          return MaterialPageRoute<bool>(
+              builder: (BuildContext context) => ProductPage(_products[index]['title'], _products[index]['image'])
+          );
+        }
+        return null;
+      },
+      onUnknownRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+            builder: (BuildContext context) => ProductsPage(_products)
+        );
+      },
+    );
+  }
+
   void _addProduct(Map<String, dynamic> product) {
     setState(() {
       print(_products);
@@ -44,36 +81,6 @@ class _MyApp extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-        accentColor: Colors.redAccent,
-      ),
-      routes: {
-        // '/': (BuildContext context) => ProductsPage(_products),
-        '/': (BuildContext context) => AuthPage(),
-        '/products': (BuildContext context) => ProductsPage(_products),
-        '/admin': (BuildContext context) => ProductsManagePage(_addProduct, _deleteProduct),
-      },
-      onGenerateRoute: (RouteSettings settings) {
-        
-        final List<String> pathElements = settings.name.split('/');
-        if(pathElements[0] != '')
-          return null;
-        
-        if(pathElements[1] == 'product') {
-          final int index = int.parse(pathElements[2]);
-          return MaterialPageRoute<bool>(
-            builder: (BuildContext context) => ProductPage(_products[index]['title'], _products[index]['image'])
-          );
-        }
-        return null;
-      },
-      onUnknownRoute: (RouteSettings settings) {
-        return MaterialPageRoute(
-          builder: (BuildContext context) => ProductsPage(_products)
-        );
-      },
-    );
+    return _buildMain(context);
   }
 }
