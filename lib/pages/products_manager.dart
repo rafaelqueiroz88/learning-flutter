@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import './product_create.dart';
+import './product_edit.dart';
 import './products_list.dart';
 
 class ProductsManagePage extends StatelessWidget {
 
   final Function addProduct;
   final Function deleteProduct;
+  final List<Map<String, dynamic>> products;
 
-  ProductsManagePage(this.addProduct, this.deleteProduct);
+  ProductsManagePage(this.addProduct, this.deleteProduct, this.products);
 
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
@@ -53,8 +54,8 @@ class ProductsManagePage extends StatelessWidget {
       ),
       body: TabBarView(
         children: <Widget>[
-          ProductCreatePage(addProduct),
-          ProductsListePage(),
+          ProductEditPage(addProduct: addProduct,),
+          ProductsListePage(products),
         ],
       ),
     ),);
