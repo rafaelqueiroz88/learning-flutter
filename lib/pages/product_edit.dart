@@ -4,9 +4,10 @@ class ProductEditPage extends StatefulWidget {
 
   final Function addProduct;
   final Function updateProduct;
+  final int productIndex;
   final Map<String, dynamic> product;
 
-  ProductEditPage({this.addProduct, this.updateProduct, this.product});
+  ProductEditPage({this.addProduct, this.updateProduct, this.product, this.productIndex});
 
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +35,13 @@ class _ProductEditPage extends State<ProductEditPage> {
 
     _formKey.currentState.save();
 
-    widget.addProduct(_formData);
+    if(widget.product == null) {
+      widget.addProduct(_formData);
+    }
+    else {
+      widget.updateProduct(widget.productIndex, _formData);
+    }
+
     Navigator.pushReplacementNamed(context, '/products');
   }
 
@@ -48,6 +55,7 @@ class _ProductEditPage extends State<ProductEditPage> {
         if(value.isEmpty || value.length < 5)
           return 'É necessário informar um título e precisa ter mais que 5 caracteres';
       },
+      initialValue: widget.product == null ? '' : widget.product['title'],
       decoration: InputDecoration(
         labelText: 'Product Title',
       ),
@@ -67,6 +75,7 @@ class _ProductEditPage extends State<ProductEditPage> {
         if(value.isEmpty || value.length <= 10)
           return 'É necessário informar uma descrição com pelo menos 10 ou mais caracteres';
       },
+      initialValue: widget.product == null ? '' : widget.product['description'],
       decoration: InputDecoration(
         labelText: 'Product Description',
       ),
@@ -89,6 +98,7 @@ class _ProductEditPage extends State<ProductEditPage> {
       decoration: InputDecoration(
         labelText: 'Product Price',
       ),
+      initialValue: widget.product == null ? '' : widget.product['price'].toString(),
       /**
        * O método setState não é mais necessário, mais deixei aqui para exemplificar como ficava
        */
@@ -141,7 +151,12 @@ class _ProductEditPage extends State<ProductEditPage> {
    */
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
+    final double targetPadding = deviceWidth - targetWidth;
+
+    final Widget pageContent = GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
@@ -150,6 +165,7 @@ class _ProductEditPage extends State<ProductEditPage> {
         child: Form(
           key: _formKey,
           child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: targetPadding / 2),
             children: <Widget>[
 
               /**
@@ -166,5 +182,7 @@ class _ProductEditPage extends State<ProductEditPage> {
         ),
       ),
     );
+
+    return widget.product == null ? pageContent : Scaffold(appBar: AppBar(title: Text('Add Product'),), body: pageContent,);
   }
 }

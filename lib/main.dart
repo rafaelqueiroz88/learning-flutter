@@ -42,7 +42,7 @@ class _MyApp extends State<MyApp> {
         // '/': (BuildContext context) => ProductsPage(_products),
         '/': (BuildContext context) => AuthPage(),
         '/products': (BuildContext context) => ProductsPage(_products),
-        '/admin': (BuildContext context) => ProductsManagePage(_addProduct, _deleteProduct, _products),
+        '/admin': (BuildContext context) => ProductsManagePage(_addProduct, _updateProduct, _deleteProduct, _products),
       },
       onGenerateRoute: (RouteSettings settings) {
 
@@ -70,6 +70,12 @@ class _MyApp extends State<MyApp> {
     setState(() {
       print(_products);
       _products.add(product);
+    });
+  }
+
+  void _updateProduct(int index, Map<String, dynamic> product) {
+    setState(() {
+      _products[index] = product;
     });
   }
 

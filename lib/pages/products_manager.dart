@@ -7,9 +7,10 @@ class ProductsManagePage extends StatelessWidget {
 
   final Function addProduct;
   final Function deleteProduct;
+  final Function updateProduct;
   final List<Map<String, dynamic>> products;
 
-  ProductsManagePage(this.addProduct, this.deleteProduct, this.products);
+  ProductsManagePage(this.addProduct, this.updateProduct, this.deleteProduct, this.products);
 
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
@@ -55,7 +56,7 @@ class ProductsManagePage extends StatelessWidget {
       body: TabBarView(
         children: <Widget>[
           ProductEditPage(addProduct: addProduct,),
-          ProductsListePage(products),
+          ProductsListePage(products, updateProduct),
         ],
       ),
     ),);
