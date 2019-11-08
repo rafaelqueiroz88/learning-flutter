@@ -13,16 +13,18 @@ class _AuthPageState extends State<AuthPage> {
   bool _acceptTerms = false;
 
   DecorationImage _buildBackgroundImage() {
+
     return DecorationImage(
       fit: BoxFit.cover,
       colorFilter: ColorFilter.mode(
-          Colors.black.withOpacity(0.5), BlendMode.dstATop
+        Colors.black.withOpacity(0.5), BlendMode.dstATop
       ),
       image: AssetImage('assets/background.jpg'),
     );
   }
 
   Widget _buildEmailTextField() {
+
     return TextField(
       autofocus: true,
       decoration: InputDecoration(
@@ -39,6 +41,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildSenhaTextField() {
+    
     return TextField(
       decoration: InputDecoration(
         labelText: 'Senha',
@@ -55,6 +58,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildTermsSwitch() {
+    
     return SwitchListTile(
       value: _acceptTerms, title: Text('Aceitar os termos de uso', style: TextStyle(color: Colors.white,),), onChanged: (bool value) {
         setState(() {
@@ -65,6 +69,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildSubmitButton(BuildContext context) {
+    
     return RaisedButton(
       child: Text('Entrar'),
       // color: Colors.redAccent,

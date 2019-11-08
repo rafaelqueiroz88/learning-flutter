@@ -40,6 +40,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
    * Construindo o widget para gerar o campo de texto do título
    */
   Widget _buildTitleTextField() {
+
     return TextFormField(
       autofocus: true,
       validator: (String value) {
@@ -59,6 +60,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
    * Construindo o widget para gerar o campo de texto do descrição
    */
   Widget _buildDescriptionTextField() {
+
     return TextFormField(
       maxLines: 4,
       validator: (String value) {
@@ -78,6 +80,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
    * Construindo o widget para gerar o campo de texto do preço
    */
   Widget _buildPriceTextField() {
+
     return TextFormField(
       keyboardType: TextInputType.number,
       validator: (String value) {
@@ -105,8 +108,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
     return RaisedButton(
       child: ListTile(
         leading: Icon(Icons.save),
-        title: Text(
-          'Armazenar',
+        title: Text('Armazenar',
           style: TextStyle(
             color: Colors.white,
           ),

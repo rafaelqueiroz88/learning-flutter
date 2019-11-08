@@ -10,7 +10,10 @@ class Products extends StatelessWidget {
 
   Widget _buildProductsList() {
 
-    Widget productCard = Center(child: Text("Nenhum prato cadastrado. Adicione algum!"),);
+    Widget productCard = Center(
+      child: Text("Nenhum prato cadastrado. Adicione algum!"),
+    );
+    
     if(products.length > 0) {
       productCard = ListView.builder(
         itemBuilder: (BuildContext context, int index) => ProductCard(products[index], index),

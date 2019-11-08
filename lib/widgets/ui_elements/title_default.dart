@@ -12,7 +12,9 @@ class TitleDefault extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        fontSize: 20.0, fontWeight: FontWeight.bold, fontFamily: "alexbrush"
+        fontSize: 20.0, 
+        fontWeight: FontWeight.bold, 
+        fontFamily: "alexbrush"
       )
     );
   }

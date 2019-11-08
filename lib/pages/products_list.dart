@@ -11,13 +11,19 @@ class ProductsListePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
+
         return ListTile(
           leading: Image.asset(products[index]['image']),
           title: Text(products[index]['title']),
           trailing: IconButton(
             icon: Icon(Icons.edit),
+            
+            /**
+             * 
+             */
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

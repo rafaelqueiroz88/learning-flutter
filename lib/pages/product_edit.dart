@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/helpers/ensure_visible_widget.dart';
+
 class ProductEditPage extends StatefulWidget {
 
   final Function addProduct;
@@ -23,7 +25,9 @@ class _ProductEditPage extends State<ProductEditPage> {
     'price': null,
     'image': 'assets/food.jpg'
   };
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _titleFocusNode = FocusNode();
 
   /**
    * Ao invocar tocar o botão de envio, o formulário será validado aqui
@@ -49,19 +53,23 @@ class _ProductEditPage extends State<ProductEditPage> {
    * Construindo o widget para gerar o campo de texto do título
    */
   Widget _buildTitleTextField() {
-    return TextFormField(
-      autofocus: true,
-      validator: (String value) {
-        if(value.isEmpty || value.length < 5)
-          return 'É necessário informar um título e precisa ter mais que 5 caracteres';
-      },
-      initialValue: widget.product == null ? '' : widget.product['title'],
-      decoration: InputDecoration(
-        labelText: 'Product Title',
+    return EnsureVisibleWhenFocused(
+      focusNode: _titleFocusNode,
+      child: TextFormField(
+        focusNode: _titleFocusNode,
+        autofocus: true,
+        validator: (String value) {
+          if(value.isEmpty || value.length < 5)
+            return 'É necessário informar um título e precisa ter mais que 5 caracteres';
+        },
+        initialValue: widget.product == null ? '' : widget.product['title'],
+        decoration: InputDecoration(
+          labelText: 'Product Title',
+        ),
+        onSaved: (String value) {
+          _formData['title'] = value;
+        },
       ),
-      onSaved: (String value) {
-        _formData['title'] = value;
-      },
     );
   }
 
