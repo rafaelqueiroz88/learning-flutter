@@ -8,9 +8,11 @@ import 'package:flutter_course/widgets/ui_elements/title_default.dart';
 class ProductPage extends StatelessWidget {
 
   final String title;
+  final String description;
   final String imageUrl;
+  final double price;
 
-  ProductPage(this.title, this.imageUrl);
+  ProductPage(this.title, this.imageUrl, this.description, this.price);
 
   Widget _buildProductRow(BuildContext context) {
     return Row(
@@ -74,7 +76,7 @@ class ProductPage extends StatelessWidget {
             children: <Widget>[
               Image.asset(imageUrl),
               Container(
-                padding: EdgeInsets.all(10.0), 
+                padding: EdgeInsets.all(10.0),
                 child: TitleDefault(title),
               ),
               _buildProductRow(context),

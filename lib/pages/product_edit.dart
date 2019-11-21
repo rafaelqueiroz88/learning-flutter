@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../widgets/helpers/ensure_visible_widget.dart';
 
+import '../models/product.dart';
+
 class ProductEditPage extends StatefulWidget {
 
   final Function addProduct;
   final Function updateProduct;
   final int productIndex;
-  final Map<String, dynamic> product;
+  final Product product;
 
   ProductEditPage({this.addProduct, this.updateProduct, this.product, this.productIndex});
 
@@ -40,7 +42,12 @@ class _ProductEditPage extends State<ProductEditPage> {
     _formKey.currentState.save();
 
     if(widget.product == null) {
-      widget.addProduct(_formData);
+      widget.addProduct(Product(
+        title: _formData['title'],
+        description: _formData['description'],
+        image: _formData['image'],
+        price: _formData['price'],
+      ));
     }
     else {
       widget.updateProduct(widget.productIndex, _formData);
@@ -62,7 +69,7 @@ class _ProductEditPage extends State<ProductEditPage> {
           if(value.isEmpty || value.length < 5)
             return 'É necessário informar um título e precisa ter mais que 5 caracteres';
         },
-        initialValue: widget.product == null ? '' : widget.product['title'],
+        initialValue: widget.product == null ? '' : widget.product.title,
         decoration: InputDecoration(
           labelText: 'Product Title',
         ),
@@ -83,7 +90,7 @@ class _ProductEditPage extends State<ProductEditPage> {
         if(value.isEmpty || value.length <= 10)
           return 'É necessário informar uma descrição com pelo menos 10 ou mais caracteres';
       },
-      initialValue: widget.product == null ? '' : widget.product['description'],
+      initialValue: widget.product == null ? '' : widget.product.description,
       decoration: InputDecoration(
         labelText: 'Product Description',
       ),
@@ -106,7 +113,7 @@ class _ProductEditPage extends State<ProductEditPage> {
       decoration: InputDecoration(
         labelText: 'Product Price',
       ),
-      initialValue: widget.product == null ? '' : widget.product['price'].toString(),
+      initialValue: widget.product == null ? '' : widget.product.price.toString(),
       /**
        * O método setState não é mais necessário, mais deixei aqui para exemplificar como ficava
        */

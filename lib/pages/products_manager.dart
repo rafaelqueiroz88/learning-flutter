@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import './product_edit.dart';
 import './products_list.dart';
 
+import '../models/product.dart';
+
 class ProductsManagePage extends StatelessWidget {
 
   final Function addProduct;
   final Function deleteProduct;
   final Function updateProduct;
-  final List<Map<String, dynamic>> products;
+  final List<Product> products;
 
   ProductsManagePage(this.addProduct, this.updateProduct, this.deleteProduct, this.products);
 
@@ -61,7 +63,7 @@ class ProductsManagePage extends StatelessWidget {
             ProductEditPage(
               addProduct: addProduct,
             ),
-            ProductsListPage(products, updateProduct),
+            ProductsListPage(products, updateProduct, deleteProduct),
           ],
         ),
       ),
