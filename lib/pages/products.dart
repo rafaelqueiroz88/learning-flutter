@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/products/products.dart';
-import '../models/product.dart';
 
 class ProductsPage extends StatelessWidget {
-
-  final List<Product> products;
-
-  ProductsPage(this.products);
 
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
       child: Column(
         children: <Widget>[
+
           AppBar(
             automaticallyImplyLeading: false,
             title: Text('Toque em uma Ação'),
@@ -24,6 +20,7 @@ class ProductsPage extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/admin');
             },
           ),
+
         ],
       ),
     );
@@ -44,7 +41,7 @@ class ProductsPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Products(products),
+      body: Products(),
     );
   }
 }

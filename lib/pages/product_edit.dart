@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:scoped_model/scoped_model.dart';
+
+import '../scoped-models/products.dart';
+
 import '../widgets/helpers/ensure_visible_widget.dart';
 
 import '../models/product.dart';
@@ -34,7 +38,7 @@ class _ProductEditPage extends State<ProductEditPage> {
   /**
    * Ao invocar tocar o botão de envio, o formulário será validado aqui
    */
-  void _submitForm() {
+  void _submitForm(Function addProduct, Function updateProduct) {
 
     if (!_formKey.currentState.validate())
       return ;
@@ -42,15 +46,24 @@ class _ProductEditPage extends State<ProductEditPage> {
     _formKey.currentState.save();
 
     if(widget.product == null) {
-      widget.addProduct(Product(
-        title: _formData['title'],
-        description: _formData['description'],
-        image: _formData['image'],
-        price: _formData['price'],
-      ));
+      addProduct(
+        Product(
+          title: _formData['title'],
+          description: _formData['description'],
+          price: _formData['price'],
+          image: _formData['image'],
+        )
+      );
     }
     else {
-      widget.updateProduct(widget.productIndex, _formData);
+      updateProduct(
+        Product(
+          title: _formData['title'],
+          description: _formData['description'],
+          price: _formData['price'],
+          image: _formData['image'],
+        )
+      );
     }
 
     Navigator.pushReplacementNamed(context, '/products');
@@ -129,21 +142,20 @@ class _ProductEditPage extends State<ProductEditPage> {
    * Construindo o widget para gerar o botão de envio
    */
   Widget _buildSubmitButton() {
-    return RaisedButton(
-      child: ListTile(
-        leading: Icon(Icons.save),
-        title: Text(
-          'Armazenar',
-          style: TextStyle(
-            color: Colors.white,
+    return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model) {
+      return RaisedButton(
+        child: ListTile(
+          leading: Icon(Icons.save),
+          title: Text('Armazenar',
+            style: TextStyle(color: Colors.white,),
           ),
         ),
-      ),
 
-      // Cor personalizada, como está comentado, a cor padrão será a que foi definida em main.dart
-      // color: Theme.of(context).accentColor,
-      onPressed: _submitForm,
-    );
+        // Cor personalizada, como está comentado, a cor padrão será a que foi definida em main.dart
+        // color: Theme.of(context).accentColor,
+        onPressed: () => _submitForm(model.addProduct, model.updateProduct),
+      );
+    });
 
     /**
      * Exemplo de uso do GestureDetector
