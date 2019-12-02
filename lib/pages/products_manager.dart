@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import './product_edit.dart';
 import './products_list.dart';
 
-import '../models/product.dart';
-
 class ProductsManagePage extends StatelessWidget {
 
-  Widget _buildDrawer(BuildContext context) {
+  Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -35,7 +33,7 @@ class ProductsManagePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.orangeAccent,
         // backgroundColor: Colors.redAccent,
-        drawer: _buildDrawer(context),
+        drawer: _buildSideDrawer(context),
         appBar: AppBar(
           title: Text("Gerenciar Produtos"),
           bottom: TabBar(
@@ -52,10 +50,7 @@ class ProductsManagePage extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: <Widget>[
-            ProductEditPage(),
-            ProductsListPage(null, null, null),
-          ],
+          children: <Widget>[ProductEditPage(), ProductsListPage(),],
         ),
       ),
     );

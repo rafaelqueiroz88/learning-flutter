@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:scoped_model/scoped_model.dart';
+
 // Importação utilizada para pegar a função Future
 import 'dart:async';
 
 import 'package:flutter_course/widgets/ui_elements/title_default.dart';
+import '../scoped-models/products.dart';
+import '../models/product.dart';
 
 class ProductPage extends StatelessWidget {
 
-  final String title;
-  final String description;
-  final String imageUrl;
-  final double price;
+  final int productIndex;
 
-  ProductPage(this.title, this.imageUrl, this.description, this.price);
+  ProductPage(this.productIndex);
 
-  Widget _buildProductRow(BuildContext context) {
+  Widget _buildProductRow(BuildContext context, String title) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -65,24 +66,31 @@ class ProductPage extends StatelessWidget {
 
         return Future.value(false); 
       }, 
-      child: Scaffold(
-        backgroundColor: Colors.orangeAccent,
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(imageUrl),
-              Container(
-                padding: EdgeInsets.all(10.0),
-                child: TitleDefault(title),
+      child: ScopedModelDescendant<ProductsModel>(
+        builder: (BuildContext context, Widget child, ProductsModel model) {
+
+          Product product = model.products[productIndex];
+
+          return Scaffold(
+            backgroundColor: Colors.orangeAccent,
+            appBar: AppBar(
+              title: Text(product.title),
+            ),
+            body: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(product.image),
+                  Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: TitleDefault(product.title),
+                  ),
+                  _buildProductRow(context, product.title),
+                ],
               ),
-              _buildProductRow(context),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

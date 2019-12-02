@@ -16,9 +16,10 @@ class ProductCard extends StatelessWidget {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
+
         IconButton(
           // child: Text("Detalhes"), // IconButton não possui um CHILD
-          icon: Icon(Icons.delete),
+          icon: Icon(Icons.info_outline),
           iconSize: 35.0,
           onPressed: () => Navigator.pushNamed<bool>(context, '/product/' + productIndex.toString())
               .then((bool value) {
@@ -30,6 +31,7 @@ class ProductCard extends StatelessWidget {
           color: Colors.red,
           iconSize: 35.0,
         ),
+
       ],
     );
   }
@@ -46,9 +48,11 @@ class ProductCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
+
                 TitleDefault(product.title),
                 SizedBox(width: 5.0,),
                 PriceTag(product.price.toString()),
+
               ],
             ),
           ),
