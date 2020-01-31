@@ -33,7 +33,7 @@ class _ProductEditPage extends State<ProductEditPage> {
    */
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
-      return RaisedButton(
+      return model.isLoading ? Center(child: CircularProgressIndicator(),) : RaisedButton(
         child: ListTile(
           leading: Icon(Icons.save),
           title: Text('Armazenar',
@@ -43,7 +43,7 @@ class _ProductEditPage extends State<ProductEditPage> {
 
         // Cor personalizada, como está comentado, a cor padrão será a que foi definida em main.dart
         // color: Theme.of(context).accentColor,
-        onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectProductIndex),
+        onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectProduct, model.selectProductIndex),
       );
     });
 
@@ -65,7 +65,11 @@ class _ProductEditPage extends State<ProductEditPage> {
   /**
    * Ao invocar tocar o botão de envio, o formulário será validado aqui
    */
-  void _submitForm(Function addProduct, Function updateProduct, [int selectedProductIndex]) {
+  void _submitForm(
+      Function addProduct,
+      Function updateProduct,
+      Function setSelectedProduct,
+      [int selectedProductIndex]) {
 
     if (!_formKey.currentState.validate())
       return ;
@@ -78,7 +82,7 @@ class _ProductEditPage extends State<ProductEditPage> {
         _formData['description'],
         _formData['image'],
         _formData['price'],
-      );
+      ).then((_) => Navigator.pushReplacementNamed(context, '/products').then((_) => setSelectedProduct(null)));
     }
     else {
       updateProduct(
@@ -86,10 +90,8 @@ class _ProductEditPage extends State<ProductEditPage> {
         _formData['description'],
         _formData['image'],
         _formData['price'],
-      );
+      ).then((_) => Navigator.pushReplacementNamed(context, '/products').then((_) => setSelectedProduct(null)));
     }
-
-    Navigator.pushReplacementNamed(context, '/products');
   }
 
   /**

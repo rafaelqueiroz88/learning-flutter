@@ -4,7 +4,25 @@ import '../widgets/products/products.dart';
 
 import 'package:flutter_course/scoped-models/main.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
+
+  final MainModel model;
+
+  ProductsPage(this.model);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ProductsPageState();
+  }
+}
+
+class _ProductsPageState extends State<ProductsPage>{
+
+  @override
+  initState() {
+    widget.model.fetchProducts();
+    super.initState();
+  }
 
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
@@ -26,6 +44,17 @@ class ProductsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _BuildProductsList(BuildContext context) {
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
+      Widget content = Center(child: Text('Nenhum produto cadastrado até o momento'));
+      if(model.displayedProducts.length > 0 && !model.isLoading)
+        content = Products();
+      else if (model.isLoading)
+        content = Center(child: CircularProgressIndicator(),);
+      return content;
+    },);
   }
 
   @override
@@ -50,7 +79,7 @@ class ProductsPage extends StatelessWidget {
         ],
 
       ),
-      body: Products(),
+      body: _BuildProductsList(context),
     );
   }
 }

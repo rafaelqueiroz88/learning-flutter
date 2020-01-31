@@ -5,7 +5,25 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../scoped-models/main.dart';
 
-class ProductsListPage extends StatelessWidget {
+class ProductsListPage extends StatefulWidget {
+
+  final MainModel model;
+
+  ProductsListPage(this.model);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ProductsListPageState();
+  }
+}
+
+class _ProductsListPageState extends State<ProductsListPage> {
+
+  @override
+  initState() {
+    widget.model.fetchProducts();
+    super.initState();
+  }
 
   Widget _buildEditButton(BuildContext context, int index, MainModel model) {
     return IconButton(
@@ -18,7 +36,9 @@ class ProductsListPage extends StatelessWidget {
               return ProductEditPage();
             },
           ),
-        );
+        ).then((_) {
+          model.selectProduct(null);
+        });
       }
     );
   }
@@ -31,7 +51,7 @@ class ProductsListPage extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
 
             return Dismissible(
-              key: Key(model.products[index].title),
+              key: Key(model.allProducts[index].title),
               onDismissed: (DismissDirection direction) {
                 /**
                  * Exemplos de captura da ação de deslizar os widgets
@@ -57,7 +77,9 @@ class ProductsListPage extends StatelessWidget {
 
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage(model.allProducts[index].image),
+                      backgroundImage: NetworkImage(model.allProducts[index].image),
+                      // AssetImage deve ser usado para uma fonte local de imagem
+                      // backgroundImage: AssetImage(model.allProducts[index].image),
                     ),
                     title: Text(model.allProducts[index].title),
                     subtitle: Text('\$${model.allProducts[index].price.toString()}'),

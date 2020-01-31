@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
         ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
           return IconButton(
             icon: Icon(
-              model.products[productIndex].isFavorite ?
+              model.allProducts[productIndex].isFavorite ?
               Icons.favorite : Icons.favorite_border
             ),
             color: Colors.red,
@@ -54,7 +54,9 @@ class ProductCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(product.image),
+          Image.network(product.image),
+          // Utilize .asset quando a fonte da imagem for uma fonte local
+          // Image.asset(product.image),
           Container(
             padding: EdgeInsets.all(10.0),
             child: Row(

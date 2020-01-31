@@ -69,7 +69,7 @@ class ProductPage extends StatelessWidget {
       child: ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
 
-          Product product = model.products[productIndex];
+          Product product = model.allProducts[productIndex];
 
           return Scaffold(
             backgroundColor: Colors.orangeAccent,
@@ -80,7 +80,9 @@ class ProductPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset(product.image),
+                  Image.network(product.image),
+                  // Utilize .asset quando a fonte da imagem for uma fonte local
+                  // Image.asset(product.image),
                   Container(
                     padding: EdgeInsets.all(10.0),
                     child: TitleDefault(product.title),
