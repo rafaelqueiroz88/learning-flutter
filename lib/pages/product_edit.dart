@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
-import '../scoped-models/products.dart';
+import '../scoped-models/main.dart';
 
 import '../widgets/helpers/ensure_visible_widget.dart';
 
@@ -32,7 +32,7 @@ class _ProductEditPage extends State<ProductEditPage> {
    * Construindo o widget para gerar o botão de envio
    */
   Widget _buildSubmitButton() {
-    return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model) {
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
       return RaisedButton(
         child: ListTile(
           leading: Icon(Icons.save),
@@ -74,23 +74,18 @@ class _ProductEditPage extends State<ProductEditPage> {
 
     if(selectedProductIndex == null) {
       addProduct(
-        Product(
-          title: _formData['title'],
-          description: _formData['description'],
-          price: _formData['price'],
-          image: _formData['image'],
-        )
+        _formData['title'],
+        _formData['description'],
+        _formData['image'],
+        _formData['price'],
       );
     }
     else {
       updateProduct(
-        selectedProductIndex,
-        Product(
-          title: _formData['title'],
-          description: _formData['description'],
-          price: _formData['price'],
-          image: _formData['image'],
-        )
+        _formData['title'],
+        _formData['description'],
+        _formData['image'],
+        _formData['price'],
       );
     }
 
@@ -207,7 +202,7 @@ class _ProductEditPage extends State<ProductEditPage> {
   @override
   Widget build(BuildContext context) {
 
-    return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model) {
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
 
       final Widget pageContent = _buildPageContent(context, model.selectedProduct);
 

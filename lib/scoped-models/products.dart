@@ -1,25 +1,32 @@
-import 'package:scoped_model/scoped_model.dart';
-
 import '../models/product.dart';
+import './users_products.dart';
 
-class ProductsModel extends Model {
+mixin ProductsModel on UsersProductsModel {
 
-  List<Product> _products = [];
+  bool _showFavorites = false;
 
-  int _selectedProduct;
+  List<Product> get allProducts {
+    return List.from(products);
+  }
 
-  List<Product> get products {
-    return List.from(_products);
+  List<Product> get displayedProducts {
+    if (_showFavorites)
+      return List.from(products.where((Product product) => product.isFavorite).toList());
+    return List.from(products);
   }
 
   int get selectProductIndex {
-    return _selectedProduct;
+    return chosedProductIndex;
+  }
+
+  bool get displayFavoritesOnly {
+    return _showFavorites;
   }
 
   Product get selectedProduct {
-    if (_selectedProduct == null)
+    if (chosedProductIndex == null)
       return null;
-    return _products[_selectedProduct];
+    return products[chosedProductIndex];
   }
 
   void toggleProductFavorite() {
@@ -30,32 +37,41 @@ class ProductsModel extends Model {
       description: selectedProduct.description, 
       price: selectedProduct.price, 
       image: selectedProduct.image,
+      userEmail: selectedProduct.userEmail,
+      userId: selectedProduct.userId,
       isFavorite: newFavoriteStatus 
     );
-    _products[_selectedProduct] = updatedProduct;
-    _selectedProduct = null;
+    products[chosedProductIndex] = updatedProduct;
+    chosedProductIndex = null;
     notifyListeners();
   }
 
-  void addProduct(Product product) {
-    print(_products);
-    _products.add(product);
-    _selectedProduct = null;
-    notifyListeners();
-  }
-
-  void updateProduct(int index, Product product) {
-    _products[_selectedProduct] = product;
-    _selectedProduct = null;
+  void updateProduct(String title, String description, String image, double price) {
+    final Product updateProduct = Product(
+        title: title,
+        description: description,
+        image: image,
+        price: price,
+        userEmail: selectedProduct.userEmail,
+        userId: selectedProduct.userId
+    );
+    products[chosedProductIndex] = updateProduct;
+    chosedProductIndex = null;
     notifyListeners();
   }
 
   void deleteProduct() {
-    _products.removeAt(_selectedProduct);
+    products.removeAt(chosedProductIndex);
     notifyListeners();
   }
 
   void selectProduct(int index) {
-    _selectedProduct = index;
+    chosedProductIndex = index;
+    notifyListeners();
+  }
+
+  void toggleDisplayMode() {
+    _showFavorites = !_showFavorites;
+    notifyListeners();
   }
 }

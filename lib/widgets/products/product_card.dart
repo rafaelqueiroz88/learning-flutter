@@ -6,7 +6,7 @@ import 'price_tag.dart';
 import '../ui_elements/title_default.dart';
 import '../ui_elements/address_default.dart';
 import '../../models/product.dart';
-import '../../scoped-models/products.dart';
+import '../../scoped-models/main.dart';
 
 class ProductCard extends StatelessWidget {
 
@@ -29,7 +29,7 @@ class ProductCard extends StatelessWidget {
             if(value) { }
           }),
         ),
-        ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model) {
+        ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
           return IconButton(
             icon: Icon(
               model.products[productIndex].isFavorite ?
@@ -75,6 +75,8 @@ class ProductCard extends StatelessWidget {
             ),
             child: AddressDefault('162. Potim, Rua Luis Tomas de Lima'),
           ),
+          Text("Postado por: ${product.userEmail}"),
+          // Text(product.userEmail),
           _buildButtonBar(context),
         ],
       ),

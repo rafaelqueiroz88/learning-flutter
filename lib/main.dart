@@ -10,7 +10,7 @@ import 'package:scoped_model/scoped_model.dart';
 import './pages/product.dart';
 import './pages/products_manager.dart';
 
-import './scoped-models/products.dart';
+import './scoped-models/main.dart';
 
 import './models/product.dart';
 
@@ -37,8 +37,8 @@ class _MyApp extends State<MyApp> {
   @override
   Widget _buildMain(BuildContext context) {
 
-    return ScopedModel<ProductsModel>(
-      model: ProductsModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child: MaterialApp(
         theme: ThemeData(
             brightness: Brightness.light,
