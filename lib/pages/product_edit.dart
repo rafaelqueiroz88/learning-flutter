@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:scoped_model/scoped_model.dart';
 
 import '../scoped-models/main.dart';
-
 import '../widgets/helpers/ensure_visible_widget.dart';
-
 import '../models/product.dart';
 
 class ProductEditPage extends StatefulWidget {
@@ -43,7 +40,7 @@ class _ProductEditPage extends State<ProductEditPage> {
 
         // Cor personalizada, como está comentado, a cor padrão será a que foi definida em main.dart
         // color: Theme.of(context).accentColor,
-        onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectProduct, model.selectProductIndex),
+        onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectProduct, model.selectedProductId),
       );
     });
 
@@ -76,7 +73,7 @@ class _ProductEditPage extends State<ProductEditPage> {
 
     _formKey.currentState.save();
 
-    if(selectedProductIndex == null) {
+    if(selectedProductIndex == -1) {
       addProduct(
         _formData['title'],
         _formData['description'],
@@ -208,7 +205,9 @@ class _ProductEditPage extends State<ProductEditPage> {
 
       final Widget pageContent = _buildPageContent(context, model.selectedProduct);
 
-      return model.selectProductIndex == null
+      // a comparação é feita com menos um, uma vez que o método
+      // selectedProductId.indexWhere retorna -1 caso um registro não seja encontrado
+      return model.selectedProductId == -1
         ? pageContent
         : Scaffold(
             appBar: AppBar(title: Text('Edit Product'),),

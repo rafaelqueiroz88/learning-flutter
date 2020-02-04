@@ -33,8 +33,15 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget _buildEmailTextField() {
     return TextFormField(
+      style: TextStyle(
+        color: Colors.black,
+      ),
+      cursorColor: Colors.black,
       decoration: InputDecoration(
-          labelText: 'E-Mail', filled: true, fillColor: Colors.white),
+        labelStyle: TextStyle(
+            color: Colors.black
+        ),
+        labelText: 'E-Mail', filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
         if (value.isEmpty ||
@@ -51,8 +58,14 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget _buildPasswordTextField() {
     return TextFormField(
+      style: TextStyle(
+        color: Colors.black,
+      ),
       decoration: InputDecoration(
-          labelText: 'Password', filled: true, fillColor: Colors.white),
+        labelStyle: TextStyle(
+            color: Colors.black
+        ),
+        labelText: 'Password', filled: true, fillColor: Colors.white),
       obscureText: true,
       validator: (String value) {
         if (value.isEmpty || value.length < 6) {

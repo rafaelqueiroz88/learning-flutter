@@ -16,36 +16,33 @@ class ProductCard extends StatelessWidget {
   ProductCard(this.product, this.productIndex);
 
   Widget _buildButtonBar(BuildContext context) {
-    return ButtonBar(
-      alignment: MainAxisAlignment.center,
-      children: <Widget>[
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
+      return ButtonBar(
+        alignment: MainAxisAlignment.center,
+        children: <Widget>[
 
-        IconButton(
-          // child: Text("Detalhes"), // IconButton não possui um CHILD
-          icon: Icon(Icons.info_outline),
-          iconSize: 35.0,
-          onPressed: () => Navigator.pushNamed<bool>(context, '/product/' + productIndex.toString())
-              .then((bool value) {
-            if(value) { }
-          }),
-        ),
-        ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
-          return IconButton(
-            icon: Icon(
-              model.allProducts[productIndex].isFavorite ?
-              Icons.favorite : Icons.favorite_border
-            ),
+          IconButton(
+            // child: Text("Detalhes"), // IconButton não possui um CHILD
+            icon: Icon(Icons.info_outline),
+            iconSize: 35.0,
+            onPressed: () => Navigator.pushNamed<bool>(context, '/product/' + model.allProducts[productIndex].id)
+                .then((bool value) {
+              if(value) { }
+            }),
+          ),
+          IconButton(
+            icon: Icon(model.allProducts[productIndex].isFavorite ? Icons.favorite : Icons.favorite_border ),
             color: Colors.red,
             iconSize: 35.0,
             onPressed: () {
-              model.selectProduct(productIndex);
-              model.toggleProductFavorite();
+            model.selectProduct(model.allProducts[productIndex].id);
+            model.toggleProductFavorite();
             },
-          );
-        },)
+          ),
+        ],
+      );
+    },);
 
-      ],
-    );
   }
 
   @override
@@ -54,7 +51,12 @@ class ProductCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.network(product.image),
+          FadeInImage(
+            image: NetworkImage(product.image),
+            placeholder: AssetImage('assets/food.jpg'),
+            height: 300.0,
+            fit: BoxFit.cover,
+          ),
           // Utilize .asset quando a fonte da imagem for uma fonte local
           // Image.asset(product.image),
           Container(

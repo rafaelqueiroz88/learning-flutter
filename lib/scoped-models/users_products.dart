@@ -13,7 +13,7 @@ mixin UsersProductsModel on Model {
    */
   User _authenticatedUser;
   List<Product> _products = [];
-  int _chosedProductIndex;
+  String _chosedProductId;
   bool _isLoading = false;
 
   Future<Null> addProduct(String title, String description, String image, double price) {
@@ -65,8 +65,14 @@ mixin ProductsModel on UsersProductsModel {
     return List.from(_products);
   }
 
-  int get selectProductIndex {
-    return _chosedProductIndex;
+  int get selectedProductId {
+    return _products.indexWhere((Product product){
+      return product.id == _chosedProductId;
+    });
+  }
+
+  String get selectProductId {
+    return _chosedProductId;
   }
 
   bool get displayFavoritesOnly {
@@ -74,17 +80,19 @@ mixin ProductsModel on UsersProductsModel {
   }
 
   Product get selectedProduct {
-    if (_chosedProductIndex == null)
+    if (_chosedProductId == null)
       return null;
-    return _products[_chosedProductIndex];
+    return _products.firstWhere((Product product) {
+      return product.id == _chosedProductId;
+    });
   }
 
-  void fetchProducts() {
+  Future<Null> fetchProducts() {
 
     _isLoading = true;
     notifyListeners();
 
-    http.get('https://learning-flutter-70f77.firebaseio.com/products.json')
+    return http.get('https://learning-flutter-70f77.firebaseio.com/products.json')
       .then((http.Response response) {
 
         final List<Product> fetchedProductsList = [];
@@ -111,7 +119,8 @@ mixin ProductsModel on UsersProductsModel {
 
         _products = fetchedProductsList;
         notifyListeners();
-        _isLoading = false;
+
+        _chosedProductId = null;
     });
   }
 
@@ -119,6 +128,7 @@ mixin ProductsModel on UsersProductsModel {
     final bool favoriteStatus = selectedProduct.isFavorite;
     final bool newFavoriteStatus = !favoriteStatus;
     final Product updatedProduct = Product(
+        id: selectedProduct.id,
         title: selectedProduct.title,
         description: selectedProduct.description,
         price: selectedProduct.price,
@@ -127,7 +137,9 @@ mixin ProductsModel on UsersProductsModel {
         userId: selectedProduct.userId,
         isFavorite: newFavoriteStatus
     );
-    _products[_chosedProductIndex] = updatedProduct;
+
+    _products[selectedProductId] = updatedProduct;
+
     notifyListeners();
   }
 
@@ -159,20 +171,30 @@ mixin ProductsModel on UsersProductsModel {
           userId: selectedProduct.userId
       );
 
-      _products[_chosedProductIndex] = updateProduct;
+      _products[selectedProductId] = updateProduct;
+
       notifyListeners();
     });
   }
 
   void deleteProduct() {
-    _products.removeAt(_chosedProductIndex);
+
+    _isLoading = true;
+
+    _products.removeAt(selectedProductId);
+    _chosedProductId = null;
+
     notifyListeners();
+    http.delete('https://learning-flutter-70f77.firebaseio.com/products/${selectedProductId}.json')
+      .then((http.Response response) {
+        _isLoading = false;
+        notifyListeners();
+    });
   }
 
-  void selectProduct(int index) {
-    _chosedProductIndex = index;
-    if (index != null)
-      notifyListeners();
+  void selectProduct(String productId) {
+    _chosedProductId = productId;
+    notifyListeners();
   }
 
   void toggleDisplayMode() {

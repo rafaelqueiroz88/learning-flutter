@@ -9,10 +9,8 @@ import 'package:scoped_model/scoped_model.dart';
 
 import './pages/product.dart';
 import './pages/products_manager.dart';
-
-import './scoped-models/main.dart';
-
 import './models/product.dart';
+import './scoped-models/main.dart';
 
 void main() {
 
@@ -42,7 +40,7 @@ class _MyApp extends State<MyApp> {
       model: model,
       child: MaterialApp(
         theme: ThemeData(
-            brightness: Brightness.light,
+            brightness: Brightness.dark,
             primarySwatch: Colors.blue,
             accentColor: Colors.blueAccent,
             buttonColor: Colors.blue
@@ -60,9 +58,16 @@ class _MyApp extends State<MyApp> {
             return null;
 
           if(pathElements[1] == 'product') {
-            final int index = int.parse(pathElements[2]);
+
+            final String productId = pathElements[2];
+            final Product product = model.allProducts.firstWhere((Product product) {
+              return product.id == productId;
+            });
+
+            model.selectProduct(productId);
+
             return MaterialPageRoute<bool>(
-                builder: (BuildContext context) => ProductPage(index)
+                builder: (BuildContext context) => ProductPage(product)
             );
           }
           return null;

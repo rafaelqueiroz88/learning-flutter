@@ -11,9 +11,9 @@ import '../models/product.dart';
 
 class ProductPage extends StatelessWidget {
 
-  final int productIndex;
+  final Product product;
 
-  ProductPage(this.productIndex);
+  ProductPage(this.product);
 
   Widget _buildProductRow(BuildContext context, String title) {
     return Row(
@@ -66,33 +66,30 @@ class ProductPage extends StatelessWidget {
 
         return Future.value(false); 
       }, 
-      child: ScopedModelDescendant<MainModel>(
-        builder: (BuildContext context, Widget child, MainModel model) {
-
-          Product product = model.allProducts[productIndex];
-
-          return Scaffold(
-            backgroundColor: Colors.orangeAccent,
-            appBar: AppBar(
-              title: Text(product.title),
-            ),
-            body: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Image.network(product.image),
-                  // Utilize .asset quando a fonte da imagem for uma fonte local
-                  // Image.asset(product.image),
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: TitleDefault(product.title),
-                  ),
-                  _buildProductRow(context, product.title),
-                ],
+      child: Scaffold(
+        backgroundColor: Colors.orangeAccent,
+        appBar: AppBar(
+          title: Text(product.title),
+        ),
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              FadeInImage(
+                image: NetworkImage(product.image),
+                placeholder: AssetImage('assets/food.jpg'),
+                height: 300.0,
+                fit: BoxFit.cover,
               ),
-            ),
-          );
-        },
+              // Utilize .asset quando a fonte da imagem for uma fonte local
+              // Image.asset(product.image),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child: TitleDefault(product.title),
+              ),
+              _buildProductRow(context, product.title),
+            ],),
+        ),
       ),
     );
   }

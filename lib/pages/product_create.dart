@@ -42,7 +42,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   Widget _buildTitleTextField() {
 
     return TextFormField(
-      autofocus: true,
+      // autofocus: true,
       validator: (String value) {
         if(value.isEmpty || value.length < 5)
           return 'É necessário informar um título e precisa ter mais que 5 caracteres';
