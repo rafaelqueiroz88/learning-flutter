@@ -16,7 +16,7 @@ mixin UsersProductsModel on Model {
   String _chosedProductId;
   bool _isLoading = false;
 
-  Future<Null> addProduct(String title, String description, String image, double price) {
+  Future<bool> addProduct(String title, String description, String image, double price) {
 
     _isLoading = true;
     notifyListeners();
@@ -34,6 +34,10 @@ mixin UsersProductsModel on Model {
     return http.post('https://learning-flutter-70f77.firebaseio.com/products.json', body: json.encode(productData))
       .then((http.Response response) {
 
+        if(response.statusCode != 200 || response.statusCode != 201) {
+          return false;
+        }
+
         final Map<String, dynamic> responseData = json.decode(response.body);
         final Product newProduct = Product(
           id: responseData['name'],
@@ -47,6 +51,7 @@ mixin UsersProductsModel on Model {
         _products.add(newProduct);
         notifyListeners();
         _isLoading = false;
+        return true;
     });
   }
 }
@@ -95,6 +100,11 @@ mixin ProductsModel on UsersProductsModel {
     return http.get('https://learning-flutter-70f77.firebaseio.com/products.json')
       .then((http.Response response) {
 
+        if(response.statusCode != 200 || response.statusCode != 201) {
+          print('Falha na requisição');
+          return;
+        }
+
         final List<Product> fetchedProductsList = [];
         final Map<String, dynamic> productsListData = json.decode(response.body);
 
@@ -118,8 +128,8 @@ mixin ProductsModel on UsersProductsModel {
         });
 
         _products = fetchedProductsList;
+        _isLoading = false;
         notifyListeners();
-
         _chosedProductId = null;
     });
   }

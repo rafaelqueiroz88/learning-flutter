@@ -79,7 +79,27 @@ class _ProductEditPage extends State<ProductEditPage> {
         _formData['description'],
         _formData['image'],
         _formData['price'],
-      ).then((_) => Navigator.pushReplacementNamed(context, '/products').then((_) => setSelectedProduct(null)));
+      ).then((bool success) {
+        if (success) {
+          Navigator.pushReplacementNamed(context, '/products')
+          .then((_) => setSelectedProduct(null));
+        }
+        else {
+          showDialog(builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Something went wrong'),
+              content: Text('Looks like you have a low connection'),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Ok')
+                ),
+
+              ],
+            );
+          });
+        }
+      });
     }
     else {
       updateProduct(
