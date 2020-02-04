@@ -85,7 +85,7 @@ class _ProductEditPage extends State<ProductEditPage> {
           .then((_) => setSelectedProduct(null));
         }
         else {
-          showDialog(builder: (BuildContext context) {
+          showDialog(context: context, builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Something went wrong'),
               content: Text('Looks like you have a low connection'),

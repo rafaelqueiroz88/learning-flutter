@@ -35,6 +35,8 @@ mixin UsersProductsModel on Model {
       .then((http.Response response) {
 
         if(response.statusCode != 200 || response.statusCode != 201) {
+          _isLoading = false;
+          notifyListeners();
           return false;
         }
 
