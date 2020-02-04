@@ -50,6 +50,7 @@ mixin UsersProductsModel on Model {
           userEmail: _authenticatedUser.email,
           userId: _authenticatedUser.id
         );
+
         _products.add(newProduct);
         notifyListeners();
         _isLoading = false;
@@ -82,20 +83,28 @@ mixin ProductsModel on UsersProductsModel {
     });
   }
 
+  Product get selectedProduct {
+    if (selectedProductId == null) {
+      return null;
+    }
+
+    return _products.firstWhere((Product product) {
+      return product.id == _chosedProductId;
+    });
+  }
+
   String get selectProductId {
     return _chosedProductId;
   }
 
-  bool get displayFavoritesOnly {
-    return _showFavorites;
-  }
-
-  Product get selectedProduct {
-    if (_chosedProductId == null)
-      return null;
-    return _products.firstWhere((Product product) {
+  int get selectedProductIndex {
+    return _products.indexWhere((Product product) {
       return product.id == _chosedProductId;
     });
+  }
+
+  bool get displayFavoritesOnly {
+    return _showFavorites;
   }
 
   Future<Null> fetchProducts() {
@@ -107,7 +116,7 @@ mixin ProductsModel on UsersProductsModel {
       .then((http.Response response) {
 
         if(response.statusCode != 200 && response.statusCode != 201) {
-          print('Falha na requisição');
+          _isLoading = false;
           return;
         }
 
@@ -137,6 +146,10 @@ mixin ProductsModel on UsersProductsModel {
         _isLoading = false;
         notifyListeners();
         _chosedProductId = null;
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
   }
 
@@ -151,11 +164,8 @@ mixin ProductsModel on UsersProductsModel {
         image: selectedProduct.image,
         userEmail: selectedProduct.userEmail,
         userId: selectedProduct.userId,
-        isFavorite: newFavoriteStatus
-    );
-
-    _products[selectedProductId] = updatedProduct;
-    _chosedProductId = null;
+        isFavorite: newFavoriteStatus);
+    _products[selectedProductIndex] = updatedProduct;
     notifyListeners();
   }
 
@@ -190,10 +200,6 @@ mixin ProductsModel on UsersProductsModel {
       _products[selectedProductId] = updateProduct;
 
       notifyListeners();
-    }).catchError((error) {
-      _isLoading = false;
-      notifyListeners();
-      return false;
     });
   }
 
@@ -201,12 +207,14 @@ mixin ProductsModel on UsersProductsModel {
 
     _isLoading = true;
 
-    _products.removeAt(selectedProductId);
+    final deleteProductId = selectedProduct.id;
+    _products.removeAt(selectedProductIndex);
     _chosedProductId = null;
 
     notifyListeners();
-    http.delete('https://learning-flutter-70f77.firebaseio.com/products/${selectedProductId}.json')
+    http.delete('https://learning-flutter-70f77.firebaseio.com/products/${deleteProductId}.json')
       .then((http.Response response) {
+        _chosedProductId = null;
         _isLoading = false;
         notifyListeners();
     });

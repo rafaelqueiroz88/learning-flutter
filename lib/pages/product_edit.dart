@@ -30,6 +30,7 @@ class _ProductEditPage extends State<ProductEditPage> {
    */
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model) {
+      print('AQUI ${model.selectedProductIndex}');
       return model.isLoading ? Center(child: CircularProgressIndicator(),) : RaisedButton(
         child: ListTile(
           leading: Icon(Icons.save),
@@ -40,7 +41,7 @@ class _ProductEditPage extends State<ProductEditPage> {
 
         // Cor personalizada, como está comentado, a cor padrão será a que foi definida em main.dart
         // color: Theme.of(context).accentColor,
-        onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectProduct, model.selectedProductId),
+        onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectProduct, model.selectedProductIndex),
       );
     });
 
@@ -72,7 +73,6 @@ class _ProductEditPage extends State<ProductEditPage> {
       return ;
 
     _formKey.currentState.save();
-
     if(selectedProductIndex == -1) {
       addProduct(
         _formData['title'],
@@ -227,12 +227,12 @@ class _ProductEditPage extends State<ProductEditPage> {
 
       // a comparação é feita com menos um, uma vez que o método
       // selectedProductId.indexWhere retorna -1 caso um registro não seja encontrado
-      return model.selectedProductId == -1
+      return model.selectedProductIndex == -1
         ? pageContent
         : Scaffold(
-            appBar: AppBar(title: Text('Edit Product'),),
-            body: pageContent,
-          );
+          appBar: AppBar(title: Text('Edit Product'),),
+          body: pageContent,
+        );
     });
   }
 }
