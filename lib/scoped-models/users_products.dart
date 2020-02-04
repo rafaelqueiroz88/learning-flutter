@@ -34,7 +34,7 @@ mixin UsersProductsModel on Model {
     return http.post('https://learning-flutter-70f77.firebaseio.com/products.json', body: json.encode(productData))
       .then((http.Response response) {
 
-        if(response.statusCode != 200 || response.statusCode != 201) {
+        if(response.statusCode != 200 && response.statusCode != 201) {
           _isLoading = false;
           notifyListeners();
           return false;
@@ -54,6 +54,10 @@ mixin UsersProductsModel on Model {
         notifyListeners();
         _isLoading = false;
         return true;
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
   }
 }
@@ -102,7 +106,7 @@ mixin ProductsModel on UsersProductsModel {
     return http.get('https://learning-flutter-70f77.firebaseio.com/products.json')
       .then((http.Response response) {
 
-        if(response.statusCode != 200 || response.statusCode != 201) {
+        if(response.statusCode != 200 && response.statusCode != 201) {
           print('Falha na requisição');
           return;
         }
@@ -137,8 +141,8 @@ mixin ProductsModel on UsersProductsModel {
   }
 
   void toggleProductFavorite() {
-    final bool favoriteStatus = selectedProduct.isFavorite;
-    final bool newFavoriteStatus = !favoriteStatus;
+    final bool isCurrentlyFavorite = selectedProduct.isFavorite;
+    final bool newFavoriteStatus = !isCurrentlyFavorite;
     final Product updatedProduct = Product(
         id: selectedProduct.id,
         title: selectedProduct.title,
@@ -151,7 +155,7 @@ mixin ProductsModel on UsersProductsModel {
     );
 
     _products[selectedProductId] = updatedProduct;
-
+    _chosedProductId = null;
     notifyListeners();
   }
 
@@ -186,6 +190,10 @@ mixin ProductsModel on UsersProductsModel {
       _products[selectedProductId] = updateProduct;
 
       notifyListeners();
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
   }
 
