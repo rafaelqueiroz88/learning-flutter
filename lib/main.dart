@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_course/pages/auth.dart';
-import 'package:flutter_course/pages/products.dart';
 
 import 'package:scoped_model/scoped_model.dart';
-
-// Renderizando erros em tela
 // import 'package:flutter/rendering.dart';
 
+import './pages/auth.dart';
+import './pages/products_admin.dart';
+import './pages/products.dart';
 import './pages/product.dart';
-import './pages/products_manager.dart';
-import './models/product.dart';
 import './scoped-models/main.dart';
+import './models/product.dart';
 
 void main() {
-
-  /**
-   * Os recursos abaixo dependem do rendering.dart, descomente-os para debbugar
-   */
   // debugPaintSizeEnabled = true;
   // debugPaintBaselinesEnabled = true;
   // debugPaintPointersEnabled = true;
@@ -26,63 +20,50 @@ void main() {
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _MyApp();
+    return _MyAppState();
   }
 }
 
-class _MyApp extends State<MyApp> {
-
+class _MyAppState extends State<MyApp> {
   @override
-  Widget _buildMain(BuildContext context) {
-
+  Widget build(BuildContext context) {
     final MainModel model = MainModel();
     return ScopedModel<MainModel>(
       model: model,
       child: MaterialApp(
+        // debugShowMaterialGrid: true,
         theme: ThemeData(
-            brightness: Brightness.dark,
-            primarySwatch: Colors.blue,
-            accentColor: Colors.blueAccent,
-            buttonColor: Colors.blue
-        ),
+            brightness: Brightness.light,
+            primarySwatch: Colors.deepOrange,
+            accentColor: Colors.deepPurple,
+            buttonColor: Colors.deepPurple),
+        // home: AuthPage(),
         routes: {
-          // '/': (BuildContext context) => ProductsPage(_products),
           '/': (BuildContext context) => AuthPage(),
           '/products': (BuildContext context) => ProductsPage(model),
-          '/admin': (BuildContext context) => ProductsManagePage(model),
+          '/admin': (BuildContext context) => ProductsAdminPage(model),
         },
         onGenerateRoute: (RouteSettings settings) {
-
           final List<String> pathElements = settings.name.split('/');
-          if(pathElements[0] != '')
+          if (pathElements[0] != '') {
             return null;
-
-          if(pathElements[1] == 'product') {
-
+          }
+          if (pathElements[1] == 'product') {
             final String productId = pathElements[2];
             final Product product = model.allProducts.firstWhere((Product product) {
               return product.id == productId;
             });
-
-            model.selectProduct(productId);
-
             return MaterialPageRoute<bool>(
-                builder: (BuildContext context) => ProductPage(product)
+              builder: (BuildContext context) => ProductPage(product),
             );
           }
           return null;
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-              builder: (BuildContext context) => ProductsPage(model)
-          );
+              builder: (BuildContext context) => ProductsPage(model));
         },
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildMain(context);
   }
 }

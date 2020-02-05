@@ -1,94 +1,75 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
-// Importação utilizada para pegar a função Future
-import 'dart:async';
-
-import 'package:flutter_course/widgets/ui_elements/title_default.dart';
-import '../scoped-models/main.dart';
+import '../widgets/ui_elements/title_default.dart';
 import '../models/product.dart';
+import '../scoped-models/main.dart';
 
 class ProductPage extends StatelessWidget {
-
   final Product product;
 
   ProductPage(this.product);
 
-  Widget _buildProductRow(BuildContext context, String title) {
+  Widget _buildAddressPriceRow(double price) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        Text(
+          'Union Square, San Francisco',
+          style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
+        ),
         Container(
-          padding: EdgeInsets.all(10.0),
-          child: RaisedButton(
-            color: Theme.of(context).accentColor,
-            child: Text("Apagar " + title),
-            onPressed: () => _showWarningDialog(context),
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          child: Text(
+            '|',
+            style: TextStyle(color: Colors.grey),
           ),
         ),
+        Text(
+          '\$' + price.toString(),
+          style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
+        )
       ],
     );
   }
 
-  _showWarningDialog(BuildContext context) {
-
-    showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Tem certeza?"),
-        content: Text("Esta ação NÃO PODE ser desfeita"),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Cancelar"), 
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          FlatButton(
-            child: Text("Apagar"),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context, true);
-            },  
-          ),
-        ],
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: () {
-        print('Back button pressed');
+        print('Back button pressed!');
         Navigator.pop(context, false);
-
-        return Future.value(false); 
-      }, 
+        return Future.value(false);
+      },
       child: Scaffold(
-        backgroundColor: Colors.orangeAccent,
         appBar: AppBar(
           title: Text(product.title),
         ),
-        body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              FadeInImage(
-                image: NetworkImage(product.image),
-                placeholder: AssetImage('assets/food.jpg'),
-                height: 300.0,
-                fit: BoxFit.cover,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            FadeInImage(
+              image: NetworkImage(product.image),
+              height: 300.0,
+              fit: BoxFit.cover,
+              placeholder: AssetImage('assets/food.jpg'),
+            ),
+            Container(
+              padding: EdgeInsets.all(10.0),
+              child: TitleDefault(product.title),
+            ),
+            _buildAddressPriceRow(product.price),
+            Container(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                product.description,
+                textAlign: TextAlign.center,
               ),
-              // Utilize .asset quando a fonte da imagem for uma fonte local
-              // Image.asset(product.image),
-              Container(
-                padding: EdgeInsets.all(10.0),
-                child: TitleDefault(product.title),
-              ),
-              _buildProductRow(context, product.title),
-            ],),
+            )
+          ],
         ),
       ),
     );

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_course/pages/product_edit.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
+import './product_edit.dart';
 import '../scoped-models/main.dart';
 
-class ProductsListPage extends StatefulWidget {
-
+class ProductListPage extends StatefulWidget {
   final MainModel model;
 
-  ProductsListPage(this.model);
+  ProductListPage(this.model);
 
   @override
-  State<StatefulWidget> createState() {
-    return _ProductsListPageState();
-  }
+    State<StatefulWidget> createState() {
+      return _ProductListPageState();
+    }
 }
 
-class _ProductsListPageState extends State<ProductsListPage> {
-
+class _ProductListPageState extends State<ProductListPage> {
   @override
   initState() {
     widget.model.fetchProducts();
@@ -36,10 +34,8 @@ class _ProductsListPageState extends State<ProductsListPage> {
               return ProductEditPage();
             },
           ),
-        ).then((_) {
-          model.selectProduct(null);
-        });
-      }
+        );
+      },
     );
   }
 
@@ -49,44 +45,32 @@ class _ProductsListPageState extends State<ProductsListPage> {
       builder: (BuildContext context, Widget child, MainModel model) {
         return ListView.builder(
           itemBuilder: (BuildContext context, int index) {
-
             return Dismissible(
               key: Key(model.allProducts[index].title),
               onDismissed: (DismissDirection direction) {
-                /**
-                 * Exemplos de captura da ação de deslizar os widgets
-                 * Os exemplos ficaram comentados mas não serão utilizados
-                 */
-                // da esquerda para a direita (ou do início ao fim)
                 if (direction == DismissDirection.endToStart) {
                   model.selectProduct(model.allProducts[index].id);
                   model.deleteProduct();
+                } else if (direction == DismissDirection.startToEnd) {
+                  print('Swiped start to end');
+                } else {
+                  print('Other swiping');
                 }
-                // da direita para a esquerda (ou do fim para o início)
-//            else if (direction == DismissDirection.startToEnd){
-//              print('deslizou do início para o fim');
-//            }
-                // outros (não detectados neste caso)
-//            else {
-//              print('deslizou em outra direção para outra direção');
-//            }
               },
               background: Container(color: Colors.red),
               child: Column(
                 children: <Widget>[
-
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(model.allProducts[index].image),
-                      // AssetImage deve ser usado para uma fonte local de imagem
-                      // backgroundImage: AssetImage(model.allProducts[index].image),
+                      backgroundImage:
+                          NetworkImage(model.allProducts[index].image),
                     ),
                     title: Text(model.allProducts[index].title),
-                    subtitle: Text('\$${model.allProducts[index].price.toString()}'),
+                    subtitle:
+                        Text('\$${model.allProducts[index].price.toString()}'),
                     trailing: _buildEditButton(context, index, model),
                   ),
-                  Divider(),
-
+                  Divider()
                 ],
               ),
             );
