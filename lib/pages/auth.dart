@@ -4,6 +4,11 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../scoped-models/main.dart';
 
+enum AuthMode {
+  Signup,
+  Login
+}
+
 class AuthPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -18,6 +23,8 @@ class _AuthPageState extends State<AuthPage> {
     'acceptTerms': false
   };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
+  AuthMode _authMode = AuthMode.Login;
 
   DecorationImage _buildBackgroundImage() {
     return DecorationImage(
@@ -31,7 +38,10 @@ class _AuthPageState extends State<AuthPage> {
   Widget _buildEmailTextField() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'E-Mail', filled: true, fillColor: Colors.white),
+        labelText: 'E-Mail',
+        filled: true,
+        fillColor: Colors.white
+      ),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
         if (value.isEmpty ||
@@ -51,8 +61,25 @@ class _AuthPageState extends State<AuthPage> {
       decoration: InputDecoration(
           labelText: 'Password', filled: true, fillColor: Colors.white),
       obscureText: true,
+      controller: _passwordController,
       validator: (String value) {
         if (value.isEmpty || value.length < 6) {
+          return 'Password invalid';
+        }
+      },
+      onSaved: (String value) {
+        _formData['password'] = value;
+      },
+    );
+  }
+
+  Widget _buildPasswordConfirmTextField() {
+    return TextFormField(
+      decoration: InputDecoration(
+          labelText: 'Password', filled: true, fillColor: Colors.white),
+      obscureText: true,
+      validator: (String value) {
+        if (_passwordController.text != value) {
           return 'Password invalid';
         }
       },
@@ -109,7 +136,22 @@ class _AuthPageState extends State<AuthPage> {
                       height: 10.0,
                     ),
                     _buildPasswordTextField(),
-                    _buildAcceptSwitch(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    _authMode == AuthMode.Signup ? _buildPasswordConfirmTextField() : Container(),
+                    _authMode == AuthMode.Signup ? _buildAcceptSwitch() : Container(),
+                    FlatButton(
+                      child: Text('${_authMode == AuthMode.Login ? 'Não possui conta? Cadastre-se' : 'Login'}'),
+                      onPressed: () {
+                        _formData['email'] = null;
+                        _formData['password'] = null;
+                        _formData['accept_terms'] = false;
+                        setState(() {
+                          _authMode = _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login;
+                        });
+                      },
+                    ),
                     SizedBox(
                       height: 10.0,
                     ),
