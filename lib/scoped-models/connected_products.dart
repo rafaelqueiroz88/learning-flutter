@@ -231,6 +231,9 @@ mixin UserModel on ConnectedProductsModel {
 
   Future<Map<String, dynamic>> signUp(String email, String password) async {
 
+    _isLoading = true;
+    notifyListeners();
+
     final String apiKey = 'AIzaSyBaFAi82LFLKIqNI6gqJVAwev3MTxn9ShM';
     final Map<String, dynamic> authData = {
       'email': email,
@@ -242,10 +245,28 @@ mixin UserModel on ConnectedProductsModel {
       body: json.encode(authData),
       headers: {'Content-Type': 'application/json'}
     );
+    final Map<String, dynamic> responseData = json.decode(response.body);
 
-    // print(json.decode(response.body));
-    // This will be hard code for a while
-    return {'success': true, 'message': 'Auth completed'};
+    print(responseData);
+
+    bool hasError = true;
+    String message = 'Something went wrong';
+
+    if (responseData.containsKey('idToken')) {
+      hasError = false;
+      message = 'Authentication succeeded';
+    }
+    else if (responseData['error']['message'] == 'EMAIL_EXISTS') {
+      message = 'This e-mail already exists';
+    }
+    else if (responseData['error']['errors']['message'] == 'INVALID_EMAIL') {
+      message = 'This e-mail address is invalid';
+    }
+
+    _isLoading = false;
+    notifyListeners();
+
+    return {'success': !hasError, 'message': message};
   }
 }
 

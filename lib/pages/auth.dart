@@ -122,9 +122,24 @@ class _AuthPageState extends State<AuthPage> {
     }
     else {
       final Map<String, dynamic> successInformation = await signUp(_formData['email'], _formData['password']);
-      print('Teste');
       if(successInformation['success'])
         Navigator.pushReplacementNamed(context, '/products');
+      else {
+        showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Algo não ocorreu como esperado'),
+            content: Text(successInformation['message']),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+      }
     }
   }
 
@@ -183,9 +198,10 @@ class _AuthPageState extends State<AuthPage> {
                       height: 10.0,
                     ),
                     ScopedModelDescendant<MainModel>(
-                      builder: (BuildContext context, Widget child,
-                          MainModel model) {
-                        return RaisedButton(
+                      builder: (BuildContext context, Widget child, MainModel model) {
+                        return model.isLoading
+                          ? CircularProgressIndicator()
+                          : RaisedButton(
                           textColor: Colors.white,
                           child: Text('${_authMode == AuthMode.Login ? 'Login' : 'Cadastrar'}'),
                           onPressed: () => _submitForm(model.login, model.signUp),
