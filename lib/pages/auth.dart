@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -17,6 +18,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+
   final Map<String, dynamic> _formData = {
     'email': null,
     'password': null,
@@ -27,15 +29,16 @@ class _AuthPageState extends State<AuthPage> {
   AuthMode _authMode = AuthMode.Login;
 
   DecorationImage _buildBackgroundImage() {
+
     return DecorationImage(
       fit: BoxFit.cover,
-      colorFilter:
-          ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+      colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
       image: AssetImage('assets/background.jpg'),
     );
   }
 
   Widget _buildEmailTextField() {
+
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'E-Mail',
@@ -44,9 +47,12 @@ class _AuthPageState extends State<AuthPage> {
       ),
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
-        if (value.isEmpty ||
-            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                .hasMatch(value)) {
+
+        if (
+          value.isEmpty
+            ||
+          !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+            .hasMatch(value)) { // if starting here
           return 'Please enter a valid email';
         }
       },
@@ -57,12 +63,13 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildPasswordTextField() {
+
     return TextFormField(
-      decoration: InputDecoration(
-          labelText: 'Password', filled: true, fillColor: Colors.white),
+      decoration: InputDecoration(labelText: 'Password', filled: true, fillColor: Colors.white),
       obscureText: true,
       controller: _passwordController,
       validator: (String value) {
+
         if (value.isEmpty || value.length < 6) {
           return 'Password invalid';
         }
@@ -74,25 +81,26 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildPasswordConfirmTextField() {
+
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'Password', filled: true, fillColor: Colors.white),
       obscureText: true,
       validator: (String value) {
+
         if (_passwordController.text != value) {
           return 'Password invalid';
         }
-      },
-      onSaved: (String value) {
-        _formData['password'] = value;
       },
     );
   }
 
   Widget _buildAcceptSwitch() {
+
     return SwitchListTile(
       value: _formData['acceptTerms'],
       onChanged: (bool value) {
+
         setState(() {
           _formData['acceptTerms'] = value;
         });
@@ -101,19 +109,34 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  void _submitForm(Function login) {
+  void _submitForm(Function login, Function signUp) async {
+
     if (!_formKey.currentState.validate() || !_formData['acceptTerms']) {
       return;
     }
+
     _formKey.currentState.save();
-    login(_formData['email'], _formData['password']);
-    Navigator.pushReplacementNamed(context, '/products');
+
+    if (_authMode == AuthMode.Login) {
+      login(_formData['email'], _formData['password']);
+    }
+    else {
+      final Map<String, dynamic> successInformation = await signUp(_formData['email'], _formData['password']);
+      print('Teste');
+      if(successInformation['success'])
+        Navigator.pushReplacementNamed(context, '/products');
+    }
   }
 
+  /**
+   * Main screen scaffold here
+   */
   @override
   Widget build(BuildContext context) {
+
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -140,7 +163,7 @@ class _AuthPageState extends State<AuthPage> {
                       height: 10.0,
                     ),
                     _authMode == AuthMode.Signup ? _buildPasswordConfirmTextField() : Container(),
-                    _authMode == AuthMode.Signup ? _buildAcceptSwitch() : Container(),
+                    _buildAcceptSwitch(),
                     FlatButton(
                       child: Text(
                         '${_authMode == AuthMode.Login ? 'Não possui conta?\nToque aqui e CADASTRE-SE'
@@ -165,7 +188,7 @@ class _AuthPageState extends State<AuthPage> {
                         return RaisedButton(
                           textColor: Colors.white,
                           child: Text('${_authMode == AuthMode.Login ? 'Login' : 'Cadastrar'}'),
-                          onPressed: () => _submitForm(model.login),
+                          onPressed: () => _submitForm(model.login, model.signUp),
                         );
                       },
                     ),
