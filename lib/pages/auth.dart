@@ -142,7 +142,11 @@ class _AuthPageState extends State<AuthPage> {
                     _authMode == AuthMode.Signup ? _buildPasswordConfirmTextField() : Container(),
                     _authMode == AuthMode.Signup ? _buildAcceptSwitch() : Container(),
                     FlatButton(
-                      child: Text('${_authMode == AuthMode.Login ? 'Não possui conta? Cadastre-se' : 'Login'}'),
+                      child: Text(
+                        '${_authMode == AuthMode.Login ? 'Não possui conta?\nToque aqui e CADASTRE-SE'
+                            :
+                        'Já possui uma conta?\nToque aqui e ACESSE'}', textAlign: TextAlign.center,
+                      ),
                       onPressed: () {
                         _formData['email'] = null;
                         _formData['password'] = null;
@@ -160,7 +164,7 @@ class _AuthPageState extends State<AuthPage> {
                           MainModel model) {
                         return RaisedButton(
                           textColor: Colors.white,
-                          child: Text('LOGIN'),
+                          child: Text('${_authMode == AuthMode.Login ? 'Login' : 'Cadastrar'}'),
                           onPressed: () => _submitForm(model.login),
                         );
                       },
