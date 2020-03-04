@@ -3,12 +3,9 @@ import 'dart:async';
 
 import 'package:scoped_model/scoped_model.dart';
 
+import '../models/auth.dart';
 import '../scoped-models/main.dart';
 
-enum AuthMode {
-  Signup,
-  Login
-}
 
 class AuthPage extends StatefulWidget {
   @override
@@ -109,7 +106,7 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  void _submitForm(Function login, Function signUp) async {
+  void _submitForm(Function auth) async {
 
     if (!_formKey.currentState.validate() || !_formData['acceptTerms']) {
       return;
@@ -117,29 +114,28 @@ class _AuthPageState extends State<AuthPage> {
 
     _formKey.currentState.save();
 
-    if (_authMode == AuthMode.Login) {
-      login(_formData['email'], _formData['password']);
+    Map<String, dynamic> successInformation;
+
+    successInformation = await auth(_formData['email'], _formData['password'], _authMode);
+
+    if(successInformation['success']) {
+      // Navigator.pushReplacementNamed(context, '/');
     }
     else {
-      final Map<String, dynamic> successInformation = await signUp(_formData['email'], _formData['password']);
-      if(successInformation['success'])
-        Navigator.pushReplacementNamed(context, '/products');
-      else {
-        showDialog(context: context, builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Algo não ocorreu como esperado'),
-            content: Text(successInformation['message']),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-      }
+      showDialog(context: context, builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Algo não ocorreu como esperado'),
+          content: Text(successInformation['message']),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      });
     }
   }
 
@@ -204,7 +200,7 @@ class _AuthPageState extends State<AuthPage> {
                           : RaisedButton(
                           textColor: Colors.white,
                           child: Text('${_authMode == AuthMode.Login ? 'Login' : 'Cadastrar'}'),
-                          onPressed: () => _submitForm(model.login, model.signUp),
+                          onPressed: () => _submitForm(model.authenticate),
                         );
                       },
                     ),
