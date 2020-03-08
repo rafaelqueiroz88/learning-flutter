@@ -164,7 +164,7 @@ mixin ProductsModel on ConnectedProductsModel {
     });
   }
 
-  Future<Null> fetchProducts() {
+  Future<Null> fetchProducts({onlyForUser = false}) {
 
     _isLoading = true;
     notifyListeners();
@@ -189,11 +189,17 @@ mixin ProductsModel on ConnectedProductsModel {
           image: productData['image'],
           price: productData['price'],
           userEmail: productData['userEmail'],
-          userId: productData['userId']);
+          userId: productData['userId'],
+          isFavorite: productData['wishlistUsers'] == null ? false : (productData['wishlistUsers'] as Map<String, dynamic>).containsKey(_authenticatedUser.id));
         fetchedProductList.add(product);
       });
 
-      _products = fetchedProductList;
+      _products = onlyForUser
+        ? fetchedProductList.where((Product product) {
+          return product.userId == _authenticatedUser.id;
+        }).toList()
+        : fetchedProductList;
+
       _isLoading = false;
       notifyListeners();
       _selProductId = null;
@@ -204,21 +210,52 @@ mixin ProductsModel on ConnectedProductsModel {
     });
   }
 
-  void toggleProductFavoriteStatus() {
+  void toggleProductFavoriteStatus() async {
 
     final bool isCurrentlyFavorite = selectedProduct.isFavorite;
     final bool newFavoriteStatus = !isCurrentlyFavorite;
+
     final Product updatedProduct = Product(
-      id: selectedProduct.id,
-      title: selectedProduct.title,
-      description: selectedProduct.description,
-      price: selectedProduct.price,
-      image: selectedProduct.image,
-      userEmail: selectedProduct.userEmail,
-      userId: selectedProduct.userId,
-      isFavorite: newFavoriteStatus);
+        id: selectedProduct.id,
+        title: selectedProduct.title,
+        description: selectedProduct.description,
+        price: selectedProduct.price,
+        image: selectedProduct.image,
+        userEmail: selectedProduct.userEmail,
+        userId: selectedProduct.userId,
+        isFavorite: newFavoriteStatus);
     _products[selectedProductIndex] = updatedProduct;
     notifyListeners();
+
+    http.Response response;
+
+    if(newFavoriteStatus) {
+
+      response = await http.put(
+        'https://learning-flutter-70f77.firebaseio.com/products/${selectedProduct.id}/wishlistUsers/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}',
+        body: json.encode(true)
+      );
+    }
+    else {
+      response = await http.delete(
+        'https://learning-flutter-70f77.firebaseio.com/products/${selectedProduct.id}/wishlistUsers/${_authenticatedUser.id}.json?auth=${_authenticatedUser.token}',
+      );
+    }
+
+    if(response.statusCode != 200 && response.statusCode != 201) {
+
+      final Product updatedProduct = Product(
+        id: selectedProduct.id,
+        title: selectedProduct.title,
+        description: selectedProduct.description,
+        price: selectedProduct.price,
+        image: selectedProduct.image,
+        userEmail: selectedProduct.userEmail,
+        userId: selectedProduct.userId,
+        isFavorite: newFavoriteStatus);
+      _products[selectedProductIndex] = updatedProduct;
+      notifyListeners();
+    }
   }
 
   void selectProduct(String productId) {
@@ -352,6 +389,8 @@ mixin UserModel on ConnectedProductsModel {
     _authenticatedUser = null;
     _authTimer.cancel();
 
+    _userSubject.add(false);
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     /**
@@ -372,7 +411,6 @@ mixin UserModel on ConnectedProductsModel {
 
     _authTimer = Timer(Duration(seconds: time), () {
       logout();
-      _userSubject.add(false);
     });
   }
 }
